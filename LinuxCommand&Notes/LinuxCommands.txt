@@ -1010,7 +1010,7 @@ su -> switch to root
 su <username> -> switch to username and keep my environment 
 su -<username> -> switch to useranem and load his environment
 ------------------------------
-Lec 15 Process Management
+Lec 15 Process Management Part 1
 
 Process :
 Definition: An independent program in execution, with its own memory space.
@@ -1075,6 +1075,51 @@ fg %n (where n is the Process Number in the list )
 kill a background jon 
 Kill %n 
 
-
-
 each job has its own process group
+
+---------------------------------------------
+
+Lec 16 Process Management Part 2
+
+
+at -> command is used to schedule a one-time task to run at a specific time in the future.
+
+ex : at 12:00 tuesday < script
+
+at -l 
+atq     -> List Scheduled Jobs 
+
+at -r 3 
+atrm 3  -> Delete scheduled job #3
+
+
+batch command is like at, but instead of running the job at a specific time
+, it runs it when the system load is low (idle).
+
+cron -> cron jobs are basically scheduled tasks that run automatically at specific times or intervals
+
+
+at -> Purpose	Runs a command once at a specified time.
+cron-> Runs a command repeatedly on a schedule.
+
+at → "Do this once later."
+cron → "Do this every X time.
+
+            Min | Hour(0-23) | Day of month | Month(1-12) | Day of Week (Sunday = 0 -6)
+@reboot	        (no exact time)	    Runs once after the system starts (on boot).
+@yearly	        0 0 1 1 *	        Runs once a year, at midnight on Jan 1st.
+@annually	    0 0 1 1 *	        Same as @yearly.
+@monthly	    0 0 1 * *	        Runs once a month, at midnight on the 1st.
+@weekly	        0 0 * * 0	        Runs once a week, at midnight on Sunday.
+@daily	        0 0 * * *	        Runs once a day, at midnight.
+@midnight	    0 0 * * *	        Same as @daily.
+@hourly	        0 * * * *	        Runs once every hour, at minute 0.
+
+
+crontab -l	-> List current user's cron jobs
+crontab -e	-> Edit current user's crontab
+crontab -r	-> Remove all cron jobs for current user
+
+
+Daemon :
+A daemon is a background process in an operating system that runs continuously and performs specific tasks without direct user interaction.
