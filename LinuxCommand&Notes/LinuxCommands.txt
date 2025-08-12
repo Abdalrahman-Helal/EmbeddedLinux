@@ -1,0 +1,1013 @@
+man -> manual of commands
+
+echo -> The echo command is used to print text or variables to the terminal.
+echo Hello, world!
+doesn't need double quotation 
+
+MyVar =5
+echo $MyVar
+
+
+
+
+pwd -> command in Linux stands for "print working directory"
+
+grep -> is used to search for text patterns inside files or input
+grep "error" logfile.txt  -> Search for the word "error" in a file:
+
+grep -i -> Case-Insensitive Search
+grep -v -> the -v option makes grep exclude lines that match the pattern
+grep -n -> Command shows line numbers along with matching
+grep -c	-> Count	      ,Prints the number of matching lines instead of the lines themselves.
+grep -l	-> List filenames ,Shows the filenames that contain the matching string (one per line).
+grep -L	-> List unmatched ,Shows filenames that do not contain the match.
+grep -n	-> Line numbers	  ,Shows line numbers next to matching lines.
+grep -h	-> Hide filename  ,	Suppresses the filename in the output (useful when searching multiple files).
+
+ls == echo * → list files
+ 
+-l → long format (shows permissions, size, owner, etc.)
+
+-a → all files, including hidden ones (those starting with .)
+
+-h → human-readable sizes (e.g., Kilo, Mega, Gigabyte instead of bytes)
+
+-t -> It lists files sorted by modification time, newest first.
+
+-S -> Sort by file size, from largest to smallest.
+
+-r ->  Reverse the sorting order
+        (Default ls sorts alphabetically — this makes it Z to A instead of A to Z)
+
+-R -> Recursive listing
+        Lists the contents of all subdirectories, going deep into folders.
+
+-d ->  List directory names only, not their contents.
+
+-i -> option shows the inode number of each file or directory.  
+
+
+tree -> Display directories and files in a tree-like format
+output: 
+.
+├── README.md
+├── build
+│   └── output.o
+├── docs
+│   └── guide.txt
+└── src
+    ├── main.c
+    └── utils.c
+
+tree -d -> It shows only directories, not files, in a tree structure.
+.
+├── build
+├── docs
+└── src
+
+
+cd -> change directory , by default back to HOME
+
+cd - -> go to previuos directory
+
+mkdir -p ->  Create a directory and its parent directories if they don’t exist.
+mkdir -p /home/user/projects/micromouse/code
+
+
+rmdir -> Remove (delete) empty directories only.
+
+rmdir -p (write the full path)->Remove a directory and its parent directories — but only if all are empty
+rmdir -p path/to/empty/folders
+
+file -> Determine the type of a file (not based on extension, but actual content).
+
+mw -> rename file
+
+rm -i ->  Delete files interactively, asking for confirmation before each deletion.
+rm -r -> Recursively delete directories and their contents (files & subfolders)Recursively delete directories and their contents (files & subfolders)
+rm -rf -> Forcefully and recursively delete directories and their contents — without any confirmation.
+
+cp -> Copy files and directories.
+cp -r -> copy Directory 
+ex. cp file.txt backup.txt
+
+
+
+mv -> rename files and directories
+
+head -> Display the first few lines of a file (default is 10 lines)
+head -n -> Show a specific number of lines
+ex: head -n 5 file.txt
+or  head -5 file.txt
+
+
+tail -> Display the last few lines of a file (default is 10 lines).
+tail -n 
+tail -f -> Shows the last 10 lines of the file (by default).
+Then keeps watching the file and displays new lines as they are added.
+
+
+    cat(concatenate) 
+if you have a folder containing short videos and want to conacatenate them into single movie , you can do 
+cat *.mpeg > movie.mpeg    
+
+cat -> View file content
+ex: cat file.txt
+
+cat -> Create a new file , and write content inside it , to cancel press (Hold) CTRL + D
+ex : cat > newfile.txt
+
+cat ->  Combine (concatenate) files
+
+cat file1.txt file2.txt > combined.txt(Combine the text inside 2 files)
+
+cat -> copy file 
+ex : cat file1.txt > file2CP.txt
+
+more -> View large text files one page at a time (read-only). 
+        Displays the file page by page, useful if it’s too long to fit on one screen.
+        page down by pressing SPACE
+
+
+less -> View large text files interactively — forward & backward.
+        scroll forward and backward
+
+
+uptime -> how long the system has been running, along with load averages and current users.
+
+ps -> t shows currently running processes on the system.
+
+df -> It shows disk space usage for file systems.
+df -h  -> readable format (Shows sizes in MB/GB instead of blocks.)
+df -i -> command shows inode usage on your file systems
+
+(didn't work , should have parameter i think )fdisk ->fdisk is a partitioning tool used to view, create, delete, and modify disk partitions on hard drives.
+sudo fdisk -l -> Displays a list of all disks and their partitions on the system.
+
+lsblk -> Lists all block devices (like hard drives, SSDs, USBs, SD cards), showing their structure, mount points, and sizes.
+
+top ->  shows a real-time view of system processes, CPU/memory usage, and system load — like Task Manager in Linux.
+htop -> htop is an interactive, colorful, and user-friendly alternative to top.
+
+
+-----------------------------------Network--------------------------------------------
+
+ifconfig ->  stands for interface configuration — it's used to view or configure network interfaces.
+
+ip a -> The modern replacement for ifconfig, used to view and manage network interfaces, IPs, routes, etc.
+
+sudo -> sudo stands for “superuser do” — it lets a regular user run commands with root (admin) privileges.
+
+apt -> apt stands for Advanced Package Tool — it’s used to install, update, upgrade, and remove software packages.
+
+apt search command ->Used to search for packages available in the system's repositories by name or keyword.
+
+apt install (Package name) -> Used to install software packages from Ubuntu/Debian repositories.
+apt remove (Package name) -> Used to uninstall (remove) packages, but keeps the configuration files.
+
+nano -> nano is a simple, beginner-friendly text editor you can use right in the terminal.
+
+vim -> vim stands for Vi IMproved — it’s a powerful terminal-based text editor, widely used by programmers and Linux admins.
+to save change , Press ESC , then type :w , to quit :q  or :wq in one step
+
+:q! -> to quit without saving changes   
+
+--------------------------- Wild Cards ---------------------------------
+
+--------------------------- * ---------------------------------
+The * (asterisk) is a wildcard character used to match (zero) or more characters in filenames or directories.
+
+Files starting with a: ls a*
+Remove all .log files: rm *.log
+
+
+rm -r -> remove all files that have a ' . ' in their name (e.g., `.txt`, `.c`, `.log`, etc.)
+It will recursively delete:
+
+All files like file.txt, main.c, data.log
+Also any folders with a dot in their name (e.g., my.folder)
+From the current directory
+
+rm -r * -> remove all file and directories
+
+
+--------------------------- ? ---------------------------------
+
+The ? wildcard matches exactly (one) single character in a filename or directory name.
+
+--------------------------- ! ---------------------------------
+
+rm [fxh]ile.txt
+file.txt , xile,txt , hile.txt will be removed 
+
+rm [!fxh]ile.txt -> the equal not or execpt
+wil remove any file doesn't contains these letters
+
+--------------------------- [[::]]---------------------------------
+
+[[:classname:]] matches exactly one character of that specific type.
+
+[[:digit:]]	Matches one digit (0–9)
+[[:alpha:]]	Matches one letter (A–Z or a–z)
+[[:alnum:]]	Matches one letter or digit
+[[:lower:]]	Matches one lowercase letter
+[[:upper:]]	Matches one uppercase letter
+
+--------------------------- {}---------------------------------
+rm report.{txt,pdf,docx}
+rm *.txt, *pdf, *.docx  both will work 
+so {} we don’t use it 
+
+---------------------------  \ ---------------------------------
+Escape Sequence
+
+this is file name : my?file
+to delete it -> rm my\?file
+
+
+
+-----------------------------------------------------------------
+
+stat -> command shows detailed info (metadata) about a file or directory — more than
+
+ln -> command is used to create links between files:
+
+    Hard links (default)
+
+ln -s -> Symbolic links (with -s option)
+ex: ln -s ~/myfile.txt link.txt
+always use relative path , using tilde symbol (Lecture 5 ,1 Hour :26 Min in vidoe )
+
+
+
+manpath -> to know the path of manual
+
+passwd -> to change password
+
+whatis -> command gives you a one-line summary of what a command does — taken from the manual (man pages).
+
+apropos-> command searches the manual pages for commands related to a keyword — like a built-in search engine for Linux commands.
+
+apropos == man -k 
+
+<command> -h 
+<command> --help
+
+
+pushd -> saves (pushes) your current directory to a stack and then changes to a new directory.
+
+It works like a smart cd, allowing you to jump back and forth between directories easily
+
+popd -> Pop directory off the stack and go back
+dirs -> Show the directory stack
+
+
+cal or ncal -> show Calendar
+bc -> basic calculator 
+
+hostname -> Displays or sets the name of your computer (host).
+sudo hostname <new hostname>
+
+uname -> Displays system information
+uname -r → Kernel release (version)
+uname -n → Network hostname
+uname -m → Machine hardware name
+uname -a ->  all system info
+
+
+date -> show date 
+
+date +%D	07/10/25	
+date +%F	2025-07-10	
+date +%j	192 (day 192 in this year)
+date +%Y	2025	
+date +%m/%d/%Y	07/10/2025	
+date +%m-%d-%Y	07-10-2025
+
+
+wc -l = (word count) count lines only
+
+mail ceo@company.com < CV
+spell file.txt 
+
+
+---------------------- Sequential Commands ----------------------
+
+separate them with ; 
+
+ex: echo one; sleep 5; echo two; 
+
+
+---------------------- Conditonal Commands ----------------------
+
+(Oring) || → Run next only if previous fails
+cat file1 || echo error
+
+(Anding) && → Run next only if previous succeeds
+mkdir dir1 && cd dir1
+
+
+---------------------- Loop Commands ----------------------
+used in script
+for file in *.txt     
+ > do 
+ > mv -v $file $file.old
+ > done
+
+
+---------------------- I/O Redirection  ----------------------
+
+---------------------- Standard Output Redirection  ----------------------
+
+<Commnad> >file (redirect output to file ; Overwrite)
+<Commnad> >>file (redirect output to file ; Append)
+
+echo "First line" > notes.txt
+echo "Second line" >> notes.txt
+
+cat file1 file2 > CombinedFile
+
+ls -al usr/bin > reading.txt
+
+1> → Redirect stdout (normal output)
+echo "Hello" > out.txt
+
+<Commnad> 2>file (redirect error to file ; Overwrite)
+<Commnad> 2>>file (redirect error to file ; Append)
+
+2> → Redirect stderr (errors only)
+ls notfoundfile 2> error.txt
+
+<Commnad> 1>file1 2>file2 (redirect output to file1 error to file2 ; Overwrite)
+<Commnad> 1>file1 2>file2  (redirect output to file1 error to file2 ; Append)
+
+
+&> → Redirect both stdout and stderr to same file 
+<Commnad> &> all_output.txt
+
+
+
+---------------------- Standard Input Redirection  ----------------------
+
+wc -l < file.txt
+mail ceo@company.com < CV
+
+---------------------- Common Devices for Redirection ----------------------
+
+/dev/null	"Black hole" - discards anything written to it
+
+command > /dev/null --> Discard normal output
+command 2> /dev/null --> Discard errors only	
+command &> /dev/null --> Discard both	
+
+/dev/zero
+is a special device file that provides an endless stream of zero bytes (\0) when read.
+Think of it like a file filled with infinite zeros:
+
+dev/random 
+is a special device file that outputs cryptographically secure random bytes - useful for security, keys, tokens, etc
+
+dev/unrandom 
+unblocking  , y3ny bykrr el numbers 3ady
+
+/dev/full is a special device file that:
+Always returns an error when you try to write to it
+
+Test Case : Testing write failures	See how programs behave when disk is full
+
+
+----------------------------- Pipes ------------------------------
+The pipe operator | lets you send the output of one command to be the input of another
+
+<Command1> | <Command2> | <Command3>
+
+cat log-file.log | grep "Error" , grep -> search for "Error"
+cat name-list | sort
+
+
+---------------------------- tee Command --------------------------
+<Command> | tee <list of sinks>
+
+ls -l | tee output.txt  ->
+
+Shows the ls -l result on screen
+AND saves it to output.txt
+
+ls -l | tee -a output.txt -> Append to a file instead of overwriting
+
+date | tee file1 file2 file3 file4
+Passes that output into tee
+
+tee writes it to: file1 file2 file3 file4 Also prints the output on the screen
+
+make | tee make.out.txt >>file2 -> output goes to make.out.txt and append to file2 , but doesn't print on screen cause >> redirected to the file2
+
+yes command with pipes 
+yes | rm -r *.txt
+
+
+
+-----------------------Arithmetic Expansion-------------------------
+-----------------$(( ))--------- // always use double parentheses  (( ))   
+The $((...)) syntax in Linux (Bash shell) is used for arithmetic expansion — to evaluate and compute arithmetic expressions.
+
+echo $((5+6)) // print 11 
+echo $((((5**2))*3))
+
+
+----------Brace Expansion {}---------
+brace expansion {} in Linux shell (like Bash) is used to generate arbitrary strings, often for ranges or repeated patterns.
+echo file{1,2,3}.txt
+// Ouput file1.txt file2.txt file3.txt
+
+
+
+---------Argument Quoting--------------
+---------Double Quotes " " -----------
+echo "my name is $MY_name"  // my name is tom 
+
+---------- Single Quotes ' '  ----------- 
+echo 'my name is $MY_name'  // my name is $MY_name
+
+
+----------- Back Quotes ` ` -------------
+Back quotes (`command`) are used in the shell to execute a command and substitute its output in place.
+
+echo "Today is `date`"
+Today is Thu Jul 25 21:10:00 EET 2025
+
+psuhd `pwd`
+
+
+-------------------
+tty -->The tty command in Linux/Unix tells you which terminal device you're currently using.
+
+$ tty // output  /dev/pts/0   This means you're currently using the pseudo terminal /dev/pts/0 (common in terminal emulators or SSH sessions).
+
+ls /dev/pts	Shows all active pseudo terminals
+tty	Shows your current terminal (/dev/pts/X)
+
+If you open 3 terminal windows and run tty in each:
+
+    First: /dev/pts/0
+
+    Second: /dev/pts/1
+
+    Third: /dev/pts/2
+
+Then ls /dev/pts will show all 3: 0 1 2 ptmx
+
+
+Screen -> screen is a terminal multiplexer. It lets you:
+
+    Create multiple terminal windows (called screens) in one terminal session.
+
+    Detach from a session and return later-even after disconnecting.
+
+    Run long-running processes without worrying about terminal disconnect.
+
+
+CTRL + a then c	    Create a new window
+CTRL + a then n	    Go to the next window
+CTRL + a then p	    Go to the previous window
+CTRL + a then "	    Show list of windows
+CTRL + a then d	    Detach from session (can reattach later)
+CTRL + a then A	    Rename the current window
+
+
+screen -ls	List all active sessions
+screen -r name or -r ID	Reattach a specific session by name or ID
+
+To End a Session
+Just type exit inside the session window.
+
+
+echo $SHELL -> to print ur shell
+
+
+type -> The type command in Linux tells you how a command name will be interpreted by the shell — whether it’s:
+
+    a shell builtin,
+
+    a function,
+
+    an alias,
+
+    or an actual file on disk (like /bin/ls).
+
+type ls
+# ls is aliased to `ls --color=auto`
+
+type cd
+# cd is a shell builtin
+
+type grep
+# grep is /bin/grep
+
+type myfunc
+# myfunc is a function
+
+
+The which command in Linux shows the full path of the executable that would run if you typed a command in the terminal. 
+It searches through the directories listed in the $PATH environment variable.
+
+type rm  // output is  rm is /bin/rm
+whcih rm // output is        /bin/rm    ,used in scripts 
+
+alias -> It creates shortcuts for longer commands.
+alias newCommand='LongCommand'(Make Sure no spaces)
+
+alias ll='ls -alF'
+unalias ll
+
+alias -> to show list of all alias commands
+
+history -> The history command in Linux shows a list of previously executed commands in the current shell session
+history 10 -> show last 10 command
+
+!! -> repeat last command you entered
+!<n> -> to enter the command # n in the history 
+!859 -> 
+
+The !abc command in the Linux shell (like Bash) is a history expansion feature. It re-runs the most recent command that starts with abc.
+!rm -> enter any command start with rm
+
+script -> the script command in Linux is used to record your terminal session into a file.
+script -a file -> (append the existing file)
+script -t file -> (put time stamp in front of each command)
+script -f file(flush after each command)
+
+
+source -> The source command in Linux is used to execute commands from a file in the current shell.
+source filename
+or 
+. filename
+
+use case :  Run a script without starting a new shell:
+source myscript.sh
+
+Reload .bashrc or .profile after editing:
+source ~/.bashrc
+
+set -o noclobber -> Prevents overwriting existing files using >    //  Output: bash: file.txt: cannot overwrite existing file
+To force overwrite, use >|:
+
+set +o noclobber -> This disables the protection, allowing normal overwrites (default behavior):
+
+
+------------- Environment Variable --------------------------
+Lec:11
+Normally they are all Capitial letters with " _ " as seprator
+
+env VAR = VALUE Command , this variable will not be defined the shell it will be passed to the command as Argument
+or VAR = VALUE Command 
+
+ex: env EDITOR = vim xterm
+
+Adding local variable in the shell 
+VARIABLE = VALUE 
+
+Add an Environment Variable 
+export VARIABLE = VALUE
+
+note: the value can be surrounded by quotes 
+Optional is general 
+mandatory if it contain spaces
+
+Source_Dir = "/usr/home" -> local variable , quotes optinal 
+export Project_Dir = "/my project/docs" -> Environment Variable , quotes mandatory
+
+MyVar = 5  -> local var
+to convert it to Environment Variable -> export MyVar
+to convert it from environment to local -> export -n MyVar
+
+to reset(make it 0 instead of 5) Environment variable   , export MyVar =
+
+to remove the variale -> unset MyVar
+
+
+---------- echo in Environment Variable ----------------
+echo $VAR_NAME
+{} are optinal , some cases are mandatory
+echo $HOME_and_$USER , WRONG
+echo ${HOME}_and_${USER}  , TRUE
+
+-------------------------
+printf like ehco command but uses different format 
+
+printf "$VAR_NAME \n"
+printf "String %s " $VAR_NAME
+printf "Signed Decimal Numebr  %d " $VAR_NAME
+printf "Floating Point Numebr  %f " $VAR_NAME
+
+printf "$PATH \n"
+printf "The path is set to  %s \n" $PATH
+printf "The File Count %d \n" $FILE_COUNT
+
+
+----------
+set command 
+set -> View all shell variables and functions
+
+env or printenv -> print all Environment variables (Not including Local Variables)
+
+printenv $PATH
+
+----------------------------Commonly Used Environment Variables----------------------------------
+$PATH -> Purpose: Tells the shell where to look for executable files.
+
+Add folder to the end of $PATH
+export PATH="$PATH:/home/Helal/mytools"
+
+Add folder to the beginning of $PATH
+export PATH="/home/abuhilal/mytools:$PATH"
+
+
+
+when you type: $ binary
+You're telling the shell to search for binary in the directories listed in $PATH.
+
+
+when you type: $ ./binary
+You're telling the shell: "Run the file named binary that's in the current directory (.)"
+-----------
+$DISPLAY 
+When you run a graphical program (e.g. Firefox, xclock, etc.), it needs to know where to display the window.
+The $DISPLAY variable tells it what screen or terminal to use.
+
+---------------
+$SHELL  -> contains the path to login shell 
+
+------
+$EDITOR -> Represent the name of default editor 
+
+----------
+$TERM -> Represent the kind of the used terminal
+
+----------
+$HOME -> home directory of current user
+
+
+----------------
+HISTFILE
+carries the name  of the file where your shell command history is saved
+
+HISTSIZE
+carries the number of commands to remember in the command history , the default value is 500.
+
+HISTFILESIZE
+Max number of lines/commands in the history file (~/.bash_history)
+---------------------------
+
+Lec 12: Basic Text Handling 
+ 
+>file.txt     -> redirection empty string to the file , Note that if file.txt exists, this will empty its contents (this is called truncating the file)
+, if files doesn't exist it will create it and be empty file
+
+>> file.txt   -> update timestamp only
+
+touch file.txt -> if file exist wil update file timestamp without changing it's content
+
+cat > filename (Overwrite) -> Terminal waits for your input. You type your content, 
+then press CTRL + D to end input and save the file.
+cat >> filename (Append)
+
+sort filname -> sort line in file alphabetically
+sort -r (Reverse Sort)
+sort -u (don't show similar lines (unique) ) 
+
+sort -b -> Ignore leading blanks (spaces/tabs)
+Sort lines as if they start where the first non-whitespace character appears
+
+
+sort -f -> Ignore case differences
+Sort alphabetically, but treat A and a as the same.
+
+sort -n -> Numeric sort
+Sort based on numeric value (not ASCII value of characters).
+
+uniq -> The uniq command in Linux filters out repeated lines 
+from adjacent duplicates in a file or stream.(2 line t7t b3d 3ltol) It's often used after sort.
+
+uniq -d -> show duplicate lines
+
+wc -> wc stands for word count, and it's used to count lines, words, characters, bytes, and more in a file or input.
+
+wc filename.txt
+15  50 300 filename.txt
+
+15 → number of lines
+
+50 → number of words
+
+300 → number of bytes/characters
+
+wc -l	Count lines only
+wc -w	Count words only
+wc -c	Count bytes
+
+Comparing Text Files 
+
+diff -> diff compares two files (or folders) and shows the differences between them.
+diff file1.txt file2.txt
+
+// compare file and directory
+diff file.txt dir/   -> If dir/ contains a file with the same name as file.txt, it compares
+diff file.txt dir/file.txt
+
+diff -r dir1 dir2 -> Compares files recursively in both directories.
+Shows differences in file contents and structure (i.e., missing files or folders).
+Tells you which files are different, added, or only exist in one of the directories.
+
+a stand for APPEND
+c stands for CHANGE
+d stands for DELETE
+
+ex: 8a12,15  -> After line 8 in the first file, lines 12 to 15 in the second file were added
+So, lines 12 to 15 exist in file2 but not in file1.
+
+
+5,7c8,10 -> Lines 5 to 7 in file1 were changed to lines 8 to 10 in file2.
+You’ll see these lines listed with < for file1 and > for file2 in the actual diff output.
+
+
+5,7d3 -> Lines 5 to 7 in file1 were deleted to match line 3 in file2. So, file1 has extra lines 5 to 7 that don't exist in file2.
+
+diff -> compare in normal mode 
+
+diff -c file1.txt file2.txt
+Compare two files in context format
+
+diff -u ->unified format The diff -u command shows differences between files in unified format,
+which is commonly used for code patches because it’s more compact than the context (-c) format.
+
+
+
+Patching Directory Tree
+
+diff -ru old-dir new-dir > patch-file
+
+now we can use patch to update another directory with the old content
+patch -p1 < patch-file
+
+
+
+------------------------------------
+Lec 13 Regular Expressions
+
+Character Literal : 
+A character literal is a regular character that matches exactly itself — no special meaning.
+
+
+Metacharacter : 
+A metacharacter is a special character that controls how regex behaves.
+It does not match itself — it has a special function.
+
+.	Matches any one character	a.c → abc, a1c
+*	Matches zero or more of previous	bo* → b, booo
++	Matches one or more	go+ → go, goo
+?	Matches zero or one 
+etc 
+ 
+note :
+
+.	Meta: Any single character
+\.	Literal: A real dot .
+a*	Meta: a repeated zero or more times
+[.*]	Literal: Matches either . or *
+
+
+
+
+BRE -> Basic Regular Expressions
+
+--------------------- Dot . -----------------------
+Matches any single character
+
+grep ".zip" file.log   -> any character followed by zip , but will not searchig for zip only
+
+--------------------- Ahchor ^ ,  $ ---------------
+^ at the beginning of the string 
+& at the end of the string 
+
+grep "^zip" file.txt -> result any line starts with "zip"
+grep "zip$" file.txt -> result any line ends with "zip"
+grep "^zip$" file.txt-> result any line has only "zip"
+grep "^$" file.txt -> result in empty lines 
+
+----------------- Square Brackets [] --------------------
+any char inside [] will considered as a literal char not meta char , execpt  ^ and  - 
+grep "[^ab]zip" file.txt -> considered as negation , searching for any char execpt a , b or NULL char
+grep "[a-z]zip" file.txt -> a to z
+grep "[a-fA-F]4" file.txt -> Matches a single character in the range a–f or A–F
+grep "[bg]zip" file.txt -> Matches any one character: b , g or aaabzip ...etc
+
+Shorthand character classses 
+
+\w	Any word character	[a-zA-Z0-9_]
+\s	Any whitespace	[ \t\r\n\f\v]
+\t  Stands for tab
+\d	Any digit	[0-9]
+\D	Any non-digit	[^0-9]
+
+\W	Any non-word character	[^a-zA-Z0-9_]
+\S	Any non-whitespace	[^ \t\r\n\f\v]
+
+\xNN is a way to represent a character using its hexadecimal ASCII code.
+\x41	A	ASCII code 0x41
+
+---------------------- Charcacter Classes --------------
+[[:alnum:]]	Letters + digits	[A-Za-z0-9]
+[[:alpha:]]	Letters	[A-Za-z]
+[[:digit:]]	Digits	[0-9]
+[[:blank:]]	Space and tab	[ \t]
+[[:lower:]]	Lowercase letters	[a-z]
+[[:upper:]]	Uppercase letters	[A-Z]
+[[:space:]]	Whitespace (space, tab, newline)	[ \t\n\r\f\v]
+[[:xdigit:]]	Hex digits	[0-9A-Fa-f]
+[[:punct:]]	Punctuation symbols	! " # $ % & ...
+
+---------------- Extended Regular Expression -----------------
+egrep or grep -E
+
+
+--------------------  Alternation    |   --------------
+
+grep -E "cat|dog" file.txt
+Matches any line that contains either "cat" or "dog".
+
+We separate theg alternbation from the rest of regular expression using () 
+
+grep -E "^(AAA|BBB|CCC)" file.txt
+
+----------------- Quantifiers   * , + and ? --------------
+
+--------------------- ? --------------------------
+
+means zero or one
+
+grep -E "colou?r" file.txt  
+Matches both: color , colour
+
+---------------------- * -------------------- 
+Zero or more repetitions
+
+grep "go*d" file.txt
+Matches:gd ,god ,good ,goood , etc.
+
+
+----------------- + ---------------------
+One or More
+grep -E "lo+l" file.txt
+Matches: lol , lool , looool , etc
+
+---------------- Curly Brackets {} ---------------
+The {} quantifier is used to specify how many times a character or group must repeat.
+
+a{3}	Exactly 3 times	aaa
+a{2,}	2 or more times	aa, aaa, aaaa
+a{1,3}	Between 1 and 3 times	a, aa, aaa
+
+ex : grep -E "a{4}" file.txt
+
+
+
+---------------------- sed -------------------
+sed -> Stream Editor
+read the input file line by line 
+
+in sed the input file can be passed through
+
+input redirection :
+sed 'Command String' < input-file
+
+Pipes:
+cat input-file | sed 'Command String'
+
+
+substitution
+The sed 's' command is used for substitution — i.e., replacing text in a file or input stream.
+Substitute the (first occurrence) of pattern with replacement in each line
+
+Replace "apple" with "orange" (first only per line):
+
+sed 's/apple/orange/' file.txt
+
+apple : pattern to search 
+orange : pattern to replaced
+
+If you're working with paths like /home/user, you'd need to escape slashes:
+sed 's/\/home\/user/\/new\/path/' file.txt
+
+
+You can choose another delimiter, like : or # or |:
+sed 's:/home/user:/new/path:' file.txt
+
+use global flag to avoid the only first occurrence will be substituted
+
+
+searching for all occurrence of string 
+
+sed 's/abc/(abc)/g' file.txt
+
+Replace Matched String
+sed 's/abc/(&)/g' file.txt
+
+
+----------------------- awk ----------------
+read the input file line by line 
+awk is a powerful text-processing tool used to filter, extract, and process columns or fields in text files
+
+performs test based on some pattern . if the test succeeds it performs an action 
+
+Some Basic Pattern : 
+
+No Pattern : perfom action on every line 
+BEGIN : perform the action if this is the beginning of the file 
+END : perfom the action if this is the end of the file
+
+
+
+-------------------------
+Lec 14 Users and Permissions
+
+cp -p ->  used to copy files while preserving their original attributes (Permissions)
+
+chmod -> Change File Permissions in Linux
+
+chmod +x my-script -> add excute to all (User , Group , Other)
+chmod u+w file -> add write Permission to User
+chmod u-w file -> remove write Permission to User
+chmod go+r file -> add read to User and Other
+
+' = ' overwrite the old permission so remove read and write
+chmod a=x file3 -> This sets execute-only (x) permission for: User (u) Group (g) Others (o)
+Because a means "all", and =x means "only execute", it removes any existing r (read) or w (write) permissions.
+
+
+chmod 777 file -> this mean rwx-rwx-rwx for all (User ,Group , Other)
+
+chmod with directory
+
+chmod -R 777 ./project-dir  , -R: recursive -> apply to the directory and all its subdirectories and files
+
+chmod u+s file -> run the file with the User permission not the privileges of the current user
+chmod g+s file -> run the file with the Group permission 
+
+umask -> sets default permission values for newly created files and directories by subtracting permissions from the full/default values.
+
+sticky Bit Permission 't' 
+
+chmod +t dir1 -> in shared Directory Only the owner of a file (or root) can delete or rename it , even if others have write access to the directory.
+
+chown -> change owner 
+
+sudo chown tom file1 -> make file owned by user tome
+sudo chown :devs file1 -> make file owned by Group devs
+sudo chown tom:devs file1 -> make file owned by user tome and Group devs
+
+sudo chown -R tom  dir-1 -> (recursive) 
+
+
+chgrp -> change the owing group
+
+sudo chgrp my-group file  
+
+Create a basic user: 
+sudo useradd tom -> Adds user tome without a home directory or password (not recommended alone).
+
+Create user with home directory:
+sudo useradd -m abdo -> Creates /home/abdo automatically.
+
+passwd -> change your own password 
+sudo passwd tom -> after adding the usr tom , you will need to setup his password
+
+id username -> shows the user ID (UID), group ID (GID), and groups for a specific user.
+
+who -> Lists users logged in the system 
+
+whoami -> Display current user name
+
+finger ->  is used to display information about system users.
+
+userdel ->  is used to delete a user account from the system.
+sudo userdel tom 
+
+groupadd , groupdel 
+
+sudo groupadd groupname
+sudo groupdel groupname
+
+to add user to a group
+sudo useradd -G <GroupName> <UserName>
+
+groups ->  shows the groups a user belongs to.
+
+The su command stands for "substitute user" or "switch user".
+It allows you to switch to another user account, often used to become root
+
+su -> switch to root 
+su <username> -> switch to username and keep my environment 
+su -<username> -> switch to useranem and load his environment
+
+
