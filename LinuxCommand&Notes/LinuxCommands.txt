@@ -24,13 +24,13 @@ grep -L	-> List unmatched ,Shows filenames that do not contain the match.
 grep -n	-> Line numbers	  ,Shows line numbers next to matching lines.
 grep -h	-> Hide filename  ,	Suppresses the filename in the output (useful when searching multiple files).
 
-ls == echo * → list files
+ls == echo * -> list files
  
--l → long format (shows permissions, size, owner, etc.)
+-l -> long format (shows permissions, size, owner, etc.)
 
--a → all files, including hidden ones (those starting with .)
+-a -> all files, including hidden ones (those starting with .)
 
--h → human-readable sizes (e.g., Kilo, Mega, Gigabyte instead of bytes)
+-h -> human-readable sizes (e.g., Kilo, Mega, Gigabyte instead of bytes)
 
 -t -> It lists files sorted by modification time, newest first.
 
@@ -269,9 +269,9 @@ hostname -> Displays or sets the name of your computer (host).
 sudo hostname <new hostname>
 
 uname -> Displays system information
-uname -r → Kernel release (version)
-uname -n → Network hostname
-uname -m → Machine hardware name
+uname -r -> Kernel release (version)
+uname -n -> Network hostname
+uname -m -> Machine hardware name
 uname -a ->  all system info
 
 
@@ -300,10 +300,10 @@ ex: echo one; sleep 5; echo two;
 
 ---------------------- Conditonal Commands ----------------------
 
-(Oring) || → Run next only if previous fails
+(Oring) || -> Run next only if previous fails
 cat file1 || echo error
 
-(Anding) && → Run next only if previous succeeds
+(Anding) && -> Run next only if previous succeeds
 mkdir dir1 && cd dir1
 
 
@@ -329,20 +329,20 @@ cat file1 file2 > CombinedFile
 
 ls -al usr/bin > reading.txt
 
-1> → Redirect stdout (normal output)
+1> -> Redirect stdout (normal output)
 echo "Hello" > out.txt
 
 <Commnad> 2>file (redirect error to file ; Overwrite)
 <Commnad> 2>>file (redirect error to file ; Append)
 
-2> → Redirect stderr (errors only)
+2> -> Redirect stderr (errors only)
 ls notfoundfile 2> error.txt
 
 <Commnad> 1>file1 2>file2 (redirect output to file1 error to file2 ; Overwrite)
 <Commnad> 1>file1 2>file2  (redirect output to file1 error to file2 ; Append)
 
 
-&> → Redirect both stdout and stderr to same file 
+&> -> Redirect both stdout and stderr to same file 
 <Commnad> &> all_output.txt
 
 
@@ -696,11 +696,11 @@ wc -> wc stands for word count, and it's used to count lines, words, characters,
 wc filename.txt
 15  50 300 filename.txt
 
-15 → number of lines
+15 -> number of lines
 
-50 → number of words
+50 -> number of words
 
-300 → number of bytes/characters
+300 -> number of bytes/characters
 
 wc -l	Count lines only
 wc -w	Count words only
@@ -763,9 +763,9 @@ Metacharacter :
 A metacharacter is a special character that controls how regex behaves.
 It does not match itself — it has a special function.
 
-.	Matches any one character	a.c → abc, a1c
-*	Matches zero or more of previous	bo* → b, booo
-+	Matches one or more	go+ → go, goo
+.	Matches any one character	a.c -> abc, a1c
+*	Matches zero or more of previous	bo* -> b, booo
++	Matches one or more	go+ -> go, goo
 ?	Matches zero or one 
 etc 
  
@@ -1006,8 +1006,75 @@ groups ->  shows the groups a user belongs to.
 The su command stands for "substitute user" or "switch user".
 It allows you to switch to another user account, often used to become root
 
-su -> switch to root 
+su -> switch to root  
 su <username> -> switch to username and keep my environment 
 su -<username> -> switch to useranem and load his environment
+------------------------------
+Lec 15 Process Management
+
+Process :
+Definition: An independent program in execution, with its own memory space.
+
+Thread :
+Definition: A lightweight execution unit inside a process.
+
+Think of a process as a house 🏠 and threads as people living inside it.
+Building a new house (process) takes longer than adding a new roommate (thread).
+
+to show the Process Tree Hierarchy :
+
+pstree -> Shows processes in a tree format, starting from init or systemd.
+pstree -p -> Same as above, but shows PIDs (process IDs) next to each process.
+pstree 1000 -> Shows the process tree for the process with PID 1000 and all its child processes.
+
+job -> is simply a process that the shell is managing and tracking for you
+job can be 
+
+Single Process  ex : gedit و cat file.txt
+
+Multiple connected Processes 
+ls | sort
+
+Processes Types :
+
+Foreground process :
+Only One jon can be a Foreground
+Runs interactively in the terminal.
+Takes input from the user and outputs to the screen.
+ex : ls , gedit
+
+Background process :
+Runs without blocking the terminal but still attached to the terminal.
+You can keep using the shell while it works in the background.
+Add & at the end to start in background:
+ex : gedit& 
+
+Stop a foreground job -> Press Ctrl + Z
+fg -> Resume the paused job in the foreground 
+Interrupt (kill) a foreground job -> Ctrl + C
+
+sleep 100       # runs in foreground
+Ctrl + Z        # stop it
+fg              # resume in foreground
+Ctrl + C        # interrupt and kill it
 
 
+switch the foreground to the backgtound 
+
+sleep 100       # runs in foreground
+Ctrl + Z        # stop it
+bg              # resume in background
+
+
+jobs -> shows the list of jobs started in the current shell session and their states (in BG and FG)
+
+switch the Background job to Foreground
+jobs 
+fg %n (where n is the Process Number in the list )
+
+kill a background jon 
+Kill %n 
+
+
+
+each job has its own process group
