@@ -128,6 +128,12 @@ more -> View large text files one page at a time (read-only).
         Displays the file page by page, useful if it’s too long to fit on one screen.
         page down by pressing SPACE
 
+Keys while using more:
+Space → next page
+Enter → next line
+q → quit
+b → go back one pag
+
 
 less -> View large text files interactively — forward & backward.
         scroll forward and backward
@@ -1123,3 +1129,112 @@ crontab -r	-> Remove all cron jobs for current user
 
 Daemon :
 A daemon is a background process in an operating system that runs continuously and performs specific tasks without direct user interaction.
+
+-------------------------------------------
+Lec 17 Process Monitoring 
+
+Set process priority
+
+nice ->  command is used to start a process with a specific priority (niceness level).
+nice value between -20 and +19
+non-root users can only do 1-19 nice value
+
+Lower niceness → higher priority (less polite).
+Higher niceness → lower priority (more polite).
+
+default nice value is 0 
+
+nice -5 ProcessCommand -> set nice value to 5 not -5 
+nice -n 5 ProcessCommand -> set nice value to 5
+
+nice --10 ProcessCommand -> set nice value to -10
+nice -n 10 ProcessCommand 
+
+modify Process priority
+
+renice is used to change the priority (niceness value) of an already running process
+
+renice <priority> -p <PID>
+renice 5 -p 1234 → Changes process PID 1234 to niceness 5 (lower priority).
+
+vmstat -> display System resource usage 
+
+xload 
+tload -> System Load average (in graphical fashion)
+
+free -> Display of memory usage (used / free )
+The options:
+free -k → Show in kilobytes
+free -m → Show in megabytes
+free -g → Show in gigabytes
+
+free -s 1 → Runs free repeatedly every 1 second and updates the memory stats.
+
+ 
+time -> Measuring running time of command 
+
+output ->
+real    0m0.005s   # total elapsed time
+user    0m0.001s   # CPU time in user mode
+sys     0m0.002s   # CPU time in kernel mode
+
+uptime -> Measuring system uptime
+
+ps -> Display info about processes under the current shell
+
+ps -e -> Display all processes in the system
+
+ps -A -> Display all processes in the system
+Shows all processes on the system, including those without a terminal (daemons, background services, etc.).
+
+
+ps a -> Display all processes in the system except those which are not attached with a terminal
+Shows all processes with a terminal (TTY), including ones from other users.
+
+
+ps ax -> Display all processes in the system including those which are not attached with a terminal
+
+ps -f (full format)
+Shows extra details like UID, PID, PPID, start time, TTY, time, and command.
+
+ps -F (extra full format)
+Shows everything in -f plus more memory-related info (SZ, RSS, PSR, etc.).
+
+ps -o pid,ppid,pgid,sid,command -> This ps command is using custom output format with -o to show specific process inf
+
+
+ps auxf is just combining multiple ps options:
+
+a → Show processes for all users that have a terminal.
+u → Long format ,Display user-oriented output (user, %CPU, %MEM, etc.).
+x → Include processes without a controlling terminal (e.g., daemons) , remove tty restriction.
+f → Show process hierarchy in a tree format.
+
+showing Threads
+
+
+ps -H → Show processes in a hierarchy (tree) format.
+Similar to ps f but uses indentation instead of tree lines.
+
+ps -L → Show threads of processes.
+Displays LWP (Light Weight Processes), which are basically threads inside processes.
+
+ps -T → Show threads for the calling terminal’s processes.
+Similar to -L but scoped to the current terminal session only.
+
+ps -m → Display threads after processes (by process).
+the process is shown first, then its threads listed underneath.
+
+
+top -> displays dynamic view of the resource usage of the system processes
+
+Useful keys while top is running
+Key	Action
+
+q	Quit top
+P	Sort by CPU usage
+M	Sort by Memory usage
+T	Sort by Time+ (total CPU time)
+k	Kill a process — will ask for the PID
+r	Renice (change priority) of a process
+h	Show help
