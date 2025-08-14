@@ -1395,4 +1395,93 @@ ex : sudo arp -s 192.168.1.10 00:11:22:33:44:55
 arp -d → Deletes an ARP entry (removes an IP-to-MAC mapping) from the ARP cache.
 ex :sudo arp -d 192.168.1.10
 
- 
+
+---------------------------
+
+Lec 21 Networking in Linux Part 2
+
+
+
+ping command → Sends ICMP Echo Request packets to a host to test network connectivity and measure response time.
+ex : ping google.com
+It keeps sending packets until stopped (Ctrl + C).
+
+For a fixed number of pings:
+ping -c 4 google.com
+
+
+TTL (Time To Live) in ping → a value in the packet header that tells how many hops (routers) the packet can pass through before being discarded.
+Every router it passes decreases TTL by 1
+If TTL reaches 0, the packet is dropped, preventing infinite loop
+
+
+traceroute -> same as ping  , but this tiome , you get the whole route of the packet 
+
+netstat in Linux → shows network connections, routing tables, interface statistics, and more.
+
+netstat -a → show all connections (listening + established).
+netstat -t → show only TCP connections.
+netstat -u → show only UDP connections.
+netstat -r → show routing table.
+netstat -i → show network interfaces info.
+netstat -ie → shows detailed information about all network interfaces (like ifconfig output)
+
+
+to list statistics on socket of different Protocols:
+netstat -s 
+netstat -st -> TCP
+netstat -su -> UDP
+
+
+netstat -rnC 
+
+-r → Show the kernel routing table.
+-n → Show numeric addresses (don’t resolve hostnames).
+-C → Not a standard netstat option on most Linux systems; in some versions it shows the routing
+
+telnet -> sed to connect to a remote host over TCP, usually for testing connectivity or accessing a service.
+
+telnet <desination Address>
+
+
+ftp → File Transfer Protocol client used to connect to an FTP server to upload, download, or manage files.
+ftp <desination Address>
+
+get report.pdf
+Downloads report.pdf from the server to your local machine.
+
+put myfile.txt
+Uploads myfile.txt from your local machine to the server.
+
+
+mget *.txt → Download multiple files matching a pattern.
+mput *.jpg → Upload multiple files matching a pattern.
+
+bye → Exit the FTP session.
+
+SSH (Secure Shell) protocol → A network protocol used to securely access and manage remote systems over an unsecured network.
+like the telnet but secured
+ex : ssh root@192.168.1.10
+
+scp (Secure Copy) → Copies files between local and remote systems securely over SSH
+
+scp [options] source destination
+
+scp , Local to Remote
+scp file.txt user@remote_host:/path/to/destination/
+
+scp , Remote to Local
+ex: scp user@remote_host:/path/to/file.txt /local/destination/
+
+SFTP (SSH File Transfer Protocol) → A secure way to transfer files over SSH, similar to FTP but encrypted.
+same commands as FTP
+ex : sftp root@192.168.1.10
+
+wget → A Linux command-line tool to download files from the internet via HTTP, HTTPS, or FTP.
+
+ex : wget https://example.com/file.zip
+
+ssh -X → Enables X11 forwarding over SSH,
+allowing you to run graphical applications on a remote Linux machine and display them on your local machine.
+
+VNCs
