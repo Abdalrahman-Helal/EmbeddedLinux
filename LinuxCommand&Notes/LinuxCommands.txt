@@ -1343,3 +1343,56 @@ Signal number: 15 (default for kill)
 Purpose: Politely asks a process to terminate.
 Default action: End the process.
 Catchable? ✅ Yes — the process can trap it, do cleanup, and even ignore it.
+
+
+--------------------------- 
+
+Lec 20 Networking in Linux Part 1
+
+MAC address 
+IP address 
+Subnet address
+Subnet Mask
+NAT (Network Address Tanslation)
+Domain Names
+
+ifconfig -> showing and managing interface 
+
+sudo ifconfig eth0 up  -> This will enable the eth0 interface.
+sudo ifconfig eth0 down -> disables the interface.
+
+ifconfig -s -> abstract description
+
+
+route -> command is used to view and configure the system’s IP routing table
+
+
+route add <address> dev <interface> gw <address> 
+route add default gw <address> 
+route del <address> 
+route del default 
+
+To add a route
+sudo route add 192.56.76.123 dev eth1 gw 192.168.101.1 
+sudo route add -net 192.56.76.0 netmask 255.255.255.0 dev eth0 
+sudo route add default gw 192.168.101.1 
+
+to Delete a route
+
+sudo route del default
+sudo route del 192.168.100.20
+
+ARP (Address Resolution Protocol) → Translates an IP address into a MAC address inside a local network.
+
+ARP -> command is responsible for display and management of the ARP table
+
+arp -> display ARP table
+
+arp -s -> Manually add a static ARP entry (IP-to-MAC mapping) to the ARP cache.
+sudo arp -s <IP_address> <MAC_address>
+ex : sudo arp -s 192.168.1.10 00:11:22:33:44:55
+
+arp -d → Deletes an ARP entry (removes an IP-to-MAC mapping) from the ARP cache.
+ex :sudo arp -d 192.168.1.10
+
+ 
