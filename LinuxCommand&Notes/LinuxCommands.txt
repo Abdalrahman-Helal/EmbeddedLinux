@@ -7,9 +7,6 @@ doesn't need double quotation
 MyVar =5
 echo $MyVar
 
-
-
-
 pwd -> command in Linux stands for "print working directory"
 
 grep -> is used to search for text patterns inside files or input
@@ -1484,4 +1481,96 @@ ex : wget https://example.com/file.zip
 ssh -X → Enables X11 forwarding over SSH,
 allowing you to run graphical applications on a remote Linux machine and display them on your local machine.
 
-VNCs
+VNC
+
+----------------------------
+
+Lec 22 Package Management
+
+ldd (List Dynamic Dependencies) → shows which shared libraries a program or executable uses.
+
+ldd <program>
+ex : ldd /bin/ls
+
+ldconfig → command updates the system’s shared library cache so programs can find the libraries they need.
+
+Reads library directories (from /etc/ld.so.conf and /etc/ld.so.conf.d/).
+Updates the /etc/ld.so.cache file with the paths to shared libraries.
+Links library files (e.g., .so files) in standard locations.
+
+to build cache with addition of /usr/local/lib
+ldconfig /usr/local/lib
+
+ldconfig -p → lists all the shared libraries currently known to the dynamic linker, along with their full paths.
+
+dpkg → Debian package manager used to install, remove, and manage .deb packages on Debian-based systems (like Ubuntu).
+
+
+dpkg -i package.deb	-> Install a .deb package
+dpkg -r package_name -> Remove a package (keep config files)
+
+dpkg -l 
+dpkg --list → Lists all installed packages on a Debian-based system in a table format.
+dpkg -L package_name -> Show files installed by a package
+
+apt stands for Advanced Package Tool
+— a package manager used in Debian-based Linux distributions like Ubuntu.
+
+sudo apt install package_name   # Install a package
+sudo apt remove package_name    # Remove a package
+sudo apt update → Downloads the latest package lists from repositories so your system knows about the newest versions available.
+(It doesn’t install or upgrade anything, just updates the local index.)
+sudo apt upgrade → Actually upgrades the installed packages on your system to the newest versions found in the updated package list.
+
+lsb_release -sc prints the codename of your Linux distribution release.
+add-apt-repository is used to add or remove a software repository (PPA or other APT source) to your system’s sources list.
+
+Add
+ex : sudo add-apt-repository ppa:graphics-drivers/ppa
+Remove 
+ex : sudo add-apt-repository --remove ppa:graphics-drivers/ppa
+
+After adding, you usually run:
+sudo apt update 
+to refresh the package list.
+
+sudo apt dist-upgrade works like apt upgrade but it’s smarter:
+
+sudo apt upgrade → Upgrades packages without removing anything. 
+If a package needs a dependency change that would require removal of another package, it skips it.
+
+sudo apt dist-upgrade → Upgrades packages and can install or remove packages if needed to complete the upgrade 
+(used for bigger updates, like kernel changes or distro upgrades).
+
+In short:
+upgrade = safe, no removals.
+dist-upgrade = can add/remove to fully upgrade.
+
+
+sudo apt check ->  verifies the system’s package dependencies.
+
+It:
+Checks if installed packages have all required dependencies.
+Reports any broken or missing dependencies.
+Doesn’t install or remove anything — it’s just a diagnostic.
+
+sudo apt remove <package> ->  removes the installed package but keeps its configuration files.
+sudo apt purge <package> -> (removes package + config files)
+
+sudo apt autoremove -> automatically deletes unused packages that were installed as dependencies but are no longer required by any installed software.
+
+apt-cache search <keyword> -> lets you search your local APT package database using keywords found in package names or descriptions
+format : apt-cache search <search-term> 
+ex : apt-cache search vsftpd
+
+apt-cache show <package> ->  displays detailed information about a package from your local APT cache, without installing anything
+Output includes: version , size , dependencies , conflicts
+
+apt-cache pkgnames ->  lists all package names in your local APT cache database
+
+apt-cache policy <package> ->get the policy of the package  Main , Restricted , Universe , Multiverse
+
+sudo apt autoclean -> Removes the .deb files for package from /var/cache/apt/archives  that are no longer needed
+
+sudp apt clean -> Remvoes all .deb files form /var/cache/apt/archives
+
