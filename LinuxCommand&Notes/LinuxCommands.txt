@@ -1574,3 +1574,148 @@ sudo apt autoclean -> Removes the .deb files for package from /var/cache/apt/arc
 
 sudp apt clean -> Remvoes all .deb files form /var/cache/apt/archives
 
+
+------------------------------------
+
+Lec 23 Searching For Files
+
+which -> command in Linux shows the full path of the executable (Binary) file that will be run when you type a command.
+this command searching for (Binary Files) using $PATH environment
+
+locate or mlocate -> command in Linux quickly finds the paths of files and directories by searching a prebuilt database.
+but it may miss very recent files unless you update the database with:
+sudo updatedb
+
+ex : locate ib/zi
+output : /usr/lib/zip
+/usr/lib/zip/include/zip.h
+/usr/lib/zip/libzip.so
+
+
+find -> command in Linux is used to search for files and directories in a directory hierarchy based on 
+name
+size
+type
+permissions
+modification date and more.
+or combination of all of those
+
+find ~ -> command searches your home directory (because ~ expands to /home/yourusername) 
+and lists everything inside it and its subdirectories.
+
+find /bin /sbin /usr/bin -> Here you’re telling find to search in three different directories:
+
+/bin → basic essential commands
+/sbin → system administration commands
+/usr/bin → most user-level commands
+
+searchig by Type
+in find you can search by file type using the -type option.
+
+Common types:
+f → regular file
+d → directory
+l → symbolic link
+c → character device
+b → block device
+p → named pipe
+s → socket
+
+format : find <scope> -type <type>
+
+examples :
+Find only files in /usr/bin:
+find /usr/bin -type f
+
+Find only directories in /etc:
+find /etc -type d
+
+find all symbolic links in /bin:
+find /bin -type l
+
+
+Find character devices in /dev:
+find /dev -type c
+
+searchig by file name
+format : find <scope> -name <FileName>
+
+examples : 
+
+Find a file exactly named test.txt in your home directory:
+find ~ -name "test.txt"
+
+Case-insensitive search for test.txt:
+find ~ -iname "test.txt"
+
+Find all .c files under /usr/src:
+find /usr/src -name "*.c"
+
+Find all files whose names contain xml anywhere:
+find /etc -name "*xml*"
+
+
+
+searchig by file size
+format : find <scope> -size <file size filter>
+b → block (512 byte) this is the default , if no unit is passed
+c → bytes
+w → word (2Bytes)
+k → kilobytes
+M → megabytes
+G → gigabytes
+
+Find files larger than 10 MB in /var/log
+find /var/log -size +10M
+
+Find files smaller than 500 KB in /home
+find /home -size -500k
+
+Find files exactly 100 bytes in /tmp
+find /tmp -size 100c
+
+Find files between 1 MB and 5 MB
+find / -size +1M -size -5M
+
+searching by permission 
+
+Find files with exactly 644 permissions in /etc
+ex :find /etc -perm 644
+
+searching by user 
+format find <path> -user <username>
+ex : find /etc -user root
+
+searching by modification time 
+sudo find / -mtime -50  -> find files modified less than 50 days ago.
+sudo find / -atime +50  -> find files that were last (accessed) more than 50 days ago.
+
+using Multiple "ANDed" filters
+
+Find all .log files bigger than 5 MB in /var/log
+ex : find /var/log -name "*.log" -size +5M
+
+using ' -a ' to separate 
+ex : find /var/log -name "*.log" -a -size +5M
+
+using '-and' to separate
+ex : find /var/log -name "*.log" -and -size -500k
+
+
+using Multiple 'ORed' Conditions   
+
+Find files ending with .log OR .txt in /var/log:
+using '-o'
+ex :find /var/log -name "*.log" -o -name "*.txt"
+
+using '-or'
+ex :find /var/log -name "*.log" -or -name "*.txt"
+
+Inverting Conditions
+
+using '!'
+find everything NOT named file.txt in your home:
+ex : find ~ \! -name "file.txt"
+
+using '-not'
+ex : find /home -not -name "*.txt" 
