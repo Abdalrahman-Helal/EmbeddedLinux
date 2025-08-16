@@ -2021,8 +2021,57 @@ sudo dd if=/dev/sda of=/dev/sdb bs=64K conv=noerror,sync
 conv=noerror,sync → continue on read errors and pad blocks
 
 Dump of a file 
-od command in Linux stands for octal dump, and it’s used to display the contents of files
+od -> command in Linux stands for octal dump, and it’s used to display the contents of files
 in various formats (octal, hexadecimal, decimal, ASCII, etc.).
 
 od -x file.img -> output the file in hexadecimal format
 od -s file.img -> output the file in decimal format
+
+
+-------------------------------
+
+FileSystems in Linux Part1
+
+fdisk -> Manage Disk partitions , works with MBR only , doesn't work wiuh GPT
+
+fdisk -l -> is responsible for displaying and management of disk
+
+
+-Root FileSystem
+-Choosing Mount Point
+
+
+when mount a FileSystem we specify the mount point
+the mount point is the directory where we want to access  the file system
+before performing the mount , the directory need to be an empty directory
+once , we perform the mount , the directory will contain the contents of the FileSystem
+
+mount -> Lists all currently mounted filesystems if no arguments; or mounts a device if device and mount point are given
+mount → shows devices, mount points, filesystem type, and options
+
+mount -l -> Lists mounted filesystems with labels (if available)
+Useful to see volume labels for easier identification
+
+mount -l -t TYPE -> Lists only mounted filesystems of a specific type with labels
+Example: mount -l -t ext4 → shows only ext4 filesystems with labels
+
+
+mount -> mounting file system
+format : mount -t <FileSystem Type> <device> <mount point>
+
+ex: sudo mount -t ext4 /dev/sda1 /home/helal/project/
+
+
+unmount -> unmounting a filesystem
+format : unmount <device>
+         unmount <mount point>
+
+
+/etc/fstab -> file contains a list of filesystems along with their description
+-Mount point 
+-Associated device
+-Filesystem type
+
+
+
+
