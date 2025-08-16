@@ -1592,7 +1592,7 @@ output : /usr/lib/zip
 /usr/lib/zip/libzip.so
 
 
-find -> command in Linux is used to search for files and directories in a directory hierarchy based on 
+find -> command in Linux is used to search recusively in all sub directories for files and directories in a directory hierarchy based on 
 name
 size
 type
@@ -1719,3 +1719,58 @@ ex : find ~ \! -name "file.txt"
 
 using '-not'
 ex : find /home -not -name "*.txt" 
+
+
+find & perfom Action
+
+the default action for the find command is to print the list of files matching the search criteria 
+
+Actions :
+
+Print :
+ex : find ~ -type d -print
+
+Delete :
+ex : find /home -name "*.tmp" -delete
+
+Detailed List:
+ex : find ~ -size +10M -ls
+
+stop searching immediately after the first match is found:
+ex :find /etc -name "hosts" -quit   or  find /etc -name "hosts" -print -quit
+
+
+-prune : to exclude directories (or files) from the search (Skip):
+ex :find ~ -type l -prune -o -name "*.txt" -print
+    find . -path ./misc -prune -o -name '*.txt' -print
+    find . -type d \(-path dir1 -o -path dir2 -o -path dir3 \) -prune -o -print
+
+
+-exec option in the find command lets you run another command on each found file.
+Syntax: find <path> <conditions> -exec <command> {} \;
+{} → placeholder replaced by the current file found
+\; → ends the -exec command (must be escaped)
+
+ex : find . -name "*.pdf" -exec ls -l {} \;
+ex : find . -name "*.txt" -exec cp {} {}.new \;
+
+
+-ok -> -ok option in find is exactly like -exec, but safer.
+It will ask for confirmation before running the command on each matched file.
+
+
+ex : find . -name "*.old" -ok mv {} {}.new \;
+
+\;   vs     +
+
+With -exec ... \; -> executes the command once per file. (deleting file by file)
+With -exec ... + -> executes the command once with as many files as possible (batch mode). (delete all files one time)
+
+-regex option in find -> -regex lets you filter files by a regular expression that matches the entire path (not just the filename).
+
+Finds files with names like 123.log, 456.log in any subdirectory.
+ex : find . -regex '.*/[0-9]+\.log'
+
+
+
+
