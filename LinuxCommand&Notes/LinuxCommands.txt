@@ -1945,13 +1945,84 @@ but if theres error in file m you can't determine which file is the next method 
 ex : md5sum *.java > csum
 ex : find . -type f -exec md5sum {} + > csum
 
+----------------------------------
+
+Lec 25 Devices & Device Driver
+
+Kernel Loadable Module (KLM) ->  often called a kernel module 
+— is a piece of code that can be added , removed into the Linux kernel at runtime without rebooting when needed.
+KLM reside in the Linux Tree in : 
+/lib/modules/{Kernel release}/
 
 
+Inserting Module (insmod)
+ex : sudo insmod /lib/modules/`uname -r`/my-driver.ko 
+This will insert my-driver.ko for the currently running kernel version
 
 
+Removing Module (rmmod)
+ex: sudo rmmod my-driver
 
 
+Load/Unload a Module 
+modprobe ->command in Linux is used to load or remove kernel modules while automatically handling dependencies.
+Loading:
+ex : sudo modprobe module_name
+
+Unloading:
+ex : sudo modprobe -r module_name
+
+lsmode -> lisiting the loaded KLMs
+
+modinfo -> Displaying Kernel Module Info (Full path for the .ko file , Author , License type , description of the module function , valid parameters)
+ex : modinfo module_name
+
+Major Number
+
+Identifies the driver associated with the device.
+Tells the kernel which module/driver will handle operations on this device.
+Example: all hard disks may share a major number like 8
+
+Minor Number
+
+Identifies a specific device handled by that driver.
+Lets the driver distinguish between multiple devices it controls.
+Example: sda1, sda2, sda3 all share the major number 8, but have different minor numbers.
+
+Creating a Device File
+mknod command in Linux is used to create device files (special files) in /dev.
+format: mknod <device fule name> <c|b> <Major> <Minor>
+or      mknod -m <permissions> <device fule name> <c|b> <Major> <Minor>
+
+ex : sudo mknod /dev/mychardev c 240 0
+ex : sudo mknod -m 666 /dev/mychardev c 240 0
 
 
+setserial -> Configuration of serial interfaces
+lsusb -> command in Linux is used to list USB devices connected to your system.
+lsusb -t -> tree view of USB devices and hubs
 
 
+lspci -> lisiting PCI Hardware Devices
+lspci -tv -> user hierarchical structure with detailed info
+-t → tree view
+-v → verbose, shows more details (optional, can combine with -t)
+
+dd->command in Linux is a powerful tool for copying and converting data at a low level.
+It works with files, devices, partitions, and even entire disks.
+format: dd if=<source> of=<destination> [options]
+
+copy a file :
+dd if=file.img of=copy.img bs=4M
+bs=4M → read/write in 4 MB blocks for speed
+
+Backup a partition or disk:
+sudo dd if=/dev/sda of=/dev/sdb bs=64K conv=noerror,sync
+conv=noerror,sync → continue on read errors and pad blocks
+
+Dump of a file 
+od command in Linux stands for octal dump, and it’s used to display the contents of files
+in various formats (octal, hexadecimal, decimal, ASCII, etc.).
+
+od -x file.img -> output the file in hexadecimal format
+od -s file.img -> output the file in decimal format
