@@ -1766,10 +1766,191 @@ ex : find . -name "*.old" -ok mv {} {}.new \;
 With -exec ... \; -> executes the command once per file. (deleting file by file)
 With -exec ... + -> executes the command once with as many files as possible (batch mode). (delete all files one time)
 
+find -name "*.old" -exec rm  {} + 
+
 -regex option in find -> -regex lets you filter files by a regular expression that matches the entire path (not just the filename).
 
 Finds files with names like 123.log, 456.log in any subdirectory.
 ex : find . -regex '.*/[0-9]+\.log'
+
+
+
+------------------------------------
+
+Lec 24 Arhciving and Compression of Files
+
+Archiving files means:
+Putting multiple files and/or directories together into one single file — usually without compression.
+
+
+Tar file
+ex: tar cvf my-docs.tar ~/Documents/pdfs/
+c → create a new archive.
+v → verbose mode (shows which files are added).
+f → specifies the filename of the archive (my-docs.tar).
+my-docs.tar → the archive you are creating.
+~/Documents/pdfs/ → the folder you want to archive.
+
+un-tar file
+ex: tar xvf my-docs.tar ~/Documents/files/*.pdf
+x → extract
+
+show .tar file content 
+ex : tar tvf file.tar
+
+using tar inside find command 
+
+ex : find . -name "*.txt" | tar cvf file.tar   or  find . -name "*.txt" | xargs tar cvf file.tar 
+ex : find . -name "*.txt" -exec tar cvf file.tar {} +
+
+
+
+Compressing File -> procedure of reducing the size of the file by a tool that removes any redundant data in file
+
+.gz -> use the tools gzip and gunzip
+gzip <file>  file is compressed into file.gz
+gunzip <file.gz> file.gz is flattended into file
+
+better compression .bz2 use the tools bzip2 and bunzip2
+bzip2 <file> 
+bunzip2 <file.bzip2>
+
+Even Better comnpression lzma use the tools lzma and unlzma 
+lzma <file> 
+unlzma <file.lzma>
+
+NOTE : these tools deal with a single file not group of file to be able to 
+to compress a group of filei in direct tree you need to archive them first
+
+-they replaced the file with its compressed version . the original file is deleted
+
+
+Accessing Compressed Text Files
+
+zcat -> similar to cat command for uncompressed text files
+zmore , zless -> to view it page by page
+
+zgrep , zegrep -> commands used to search insdie compressed text document
+
+
+NOTE : compression preserve the permission and timestamp of the file .
+
+
+
+Mixing Archiving and Compression
+
+ex : tar cvf pdf-files.tar *.pdf
+     gzip pdf-files.tar  , we can replace gzip with any other compression tool
+     
+
+using Archiving + Compressing in single step
+
+Compressing : 
+tar <option> <compressed file>  <files or folder>
+
+Extracting : 
+tar <option> <compressed file> 
+
+z → gzip compression
+j → bzip2 compression
+--lzma → compress using LZMA
+
+Compressing:
+ex: tar cvzf my-file.tar.gz  ~/Documents/*.doc
+ex: tar cvjf my-file.tar.bzip2  ~/Documents/*.doc
+ex: tar cvf --lzma my-file.tar.lzma ~/Documents/*.doc
+
+Extracting:
+ex: tar xvzf my-file.tar.gz 
+ex: tar xvjf my-file.tar.bzip2  
+ex: tar xvf --lzma my-file.tar.lzma ~/Documents/*.doc
+
+
+rar
+
+ex : rar a archive.rar file1 file2 folder/*.pdf
+
+a → add files to archive , if archive doesn’t exist it will be created 
+    if archive exist , it will be appended with these files
+archive.rar → name of the archive
+file1 file2 folder/ → files or folders to include
+
+Lock the archive to stop more file additions   
+ex : rar k archive.rar
+
+to list the contents of the archive 
+ex : rar l archive.rar
+
+to delete file from the archive 
+ex : rar d archive.rar file1.txt
+
+Extracting rar
+
+ex : rar e archive.rar
+e → extract all files to the current directory, ignoring directories inside the archive().
+
+
+rar x command in Linux is used to extract files from a RAR archive while preserving the directory structure.
+ex : rar x archive.rar
+Keeps all folders as they were in the archive
+
+summary: 
+rar e → extracts all files into current directory, ignores folders
+rar x → extracts with full folder structure
+
+update the archive with the new modified files
+ex : rar f archive.rar  (only refreshes the current directory)
+     rar f archive.rar * (refreshes all subdirectories as well)
+
+
+zip / unzip tool 
+
+to zip directory
+ex: zip -r fiel.zip ~/Documents/  (r for recusive)
+
+to unzip 
+ex : unzip
+
+NOTE: if we use zip on a directory to file.zip and that file already exist 
+then file,zip will be updated :
+new files added 
+modified files updated
+
+
+Checking File Integrity
+
+md5sum -> command used to compute or check the MD5 hash (checksum) of files.
+Generates a 128-bit MD5 hash of a file.
+Useful to verify file integrity (detect changes or corruption).
+
+ex : md5sum file.txt > file.md5
+Output:
+d41d8cd98f00b204e9800998ecf8427e  file.md5
+
+The long string → MD5 hash
+The filename → the file hashed
+
+to check you have the correct file
+md5sum -c file.md5 , c -> check
+output: file.txt: OK
+
+
+
+checking integrity for multiple files
+
+archive the directory and perform md5 on the archive file
+ex: rar a archive.rar ~/Documents/*.pdf
+    md5sum archive.rar > archive.md5
+but if theres error in file m you can't determine which file is the next method is better
+ex : md5sum *.java > csum
+ex : find . -type f -exec md5sum {} + > csum
+
+
+
+
+
+
+
 
 
 
