@@ -2072,6 +2072,31 @@ format : unmount <device>
 -Associated device
 -Filesystem type
 
+----------------------------------------
 
+Lec 27 FileSystems in Linux Part2
+
+-ext2
+-Journaling 
+-ext3
+-ext4
+-JFFS2
+-cramfs
+-ramfs
+-tmpfs
+-NFS(Network File System) in Embedded Systems
+-procfs & sysfs
+
+df -> command in Linux is used to display disk space usage
+
+df -h -> Human-readable (sizes in KB, MB, GB, TB).
+df -T -> Shows filesystem type (e.g., ext4, xfs, tmpfs).
+df -i -> Shows inode usage instead of disk blocks.
+df -a -> Includes all filesystems, even those with 0 size (like pseudo filesystems).
+
+du (Disk Usage) -> The du command estimates and displays the disk space used by files and directories.
+
+df vs du :
+df (which shows free/used space on the filesystem), du shows how much space specific files/directories are consuming.
 
 
