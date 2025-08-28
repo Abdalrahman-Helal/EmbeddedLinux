@@ -608,5 +608,63 @@ It simplifies program creation and maintenance. UNIX systems provide two main ty
 - **Static libraries:** faster startup, but duplicate code, higher memory use, more maintenance.  
 - **Shared libraries:** memory and disk efficient, easier updates, uses **dynamic linking** at runtime.
 
+---
+### 2.10 Interprocess Communication and Synchronization
+---
 
+**Context:**  
+- A Linux system runs many processes, mostly independent.  
+- Some processes need to **cooperate**, requiring **communication** and **synchronization**.  
+
+**Basic Idea:**  
+- Processes can communicate by reading/writing files, but this is often **slow and inflexible**.  
+- Linux provides multiple **Interprocess Communication (IPC) mechanisms** for efficiency and flexibility.
+
+---
+
+### IPC Mechanisms
+
+1. **Signals**  
+   - Indicate that an **event has occurred**.  
+   - Example: `SIGINT` for interrupting a process.
+
+2. **Pipes and FIFOs**  
+   - Transfer data **between processes**.  
+   - Pipes: temporary, usually parent → child.  
+   - FIFOs (named pipes): persistent, unrelated processes can communicate.  
+   - Familiar in shells via `|` operator.
+
+3. **Sockets**  
+   - Transfer data between processes **on the same host or across networked hosts**.  
+   - Includes UNIX domain sockets and network sockets (TCP/UDP).
+
+4. **File Locking**  
+   - Allows a process to **lock regions of a file**.  
+   - Prevents **other processes from reading or updating** locked regions.
+
+5. **Message Queues**  
+   - Exchange **messages (data packets)** between processes.  
+   - Can be **asynchronous**, allowing independent process execution.
+
+6. **Semaphores**  
+   - Synchronize actions of processes.  
+   - Useful to **coordinate access to shared resources** and prevent race conditions.
+
+7. **Shared Memory**  
+   - Allows two or more processes to **share a piece of memory**.  
+   - Changes made by one process are **immediately visible** to others.
+
+---
+
+### Notes on IPC Variety
+
+- UNIX provides multiple IPC mechanisms, sometimes overlapping in functionality.  
+- Example:  
+  - **FIFOs vs. UNIX domain sockets:** Both allow unrelated processes on the same system to exchange data.  
+  - Both exist due to historical evolution:  
+    - FIFOs → System V UNIX  
+    - Sockets → BSD UNIX  
+
+**Key Takeaway:**  
+- IPC mechanisms evolved to meet **different UNIX standards** and **application requirements**, offering flexibility and performance for process communication and synchronization.
 
