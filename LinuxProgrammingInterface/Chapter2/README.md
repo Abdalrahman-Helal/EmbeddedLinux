@@ -562,3 +562,51 @@ The `mmap()` system call creates a new memory mapping in the calling process’s
 * Enable interprocess communication via shared memory regions.
 
 ---
+## 2.9 Static and Shared Libraries
+---
+
+### Object Library
+An **object library** is a file containing compiled object code for a set of related functions.  
+It simplifies program creation and maintenance. UNIX systems provide two main types of object libraries:
+- **Static libraries**  
+- **Shared libraries**
+
+---
+
+### Static Libraries
+* Also called **archives**.  
+* Early UNIX systems only had static libraries.  
+* Composed of **compiled object modules**.  
+
+**Usage:**
+- Link the program with the static library during build.  
+- The **linker extracts required object modules** and copies them into the executable.  
+- The program becomes **statically linked**.  
+
+**Disadvantages:**
+1. **Disk space waste:** Each executable gets its own copy of library functions.  
+2. **Memory waste:** Multiple running programs using the same function each have a copy in memory.  
+3. **Maintenance overhead:** If a function is updated, all programs using it must be **relinked**.
+
+---
+
+### Shared Libraries
+* Designed to solve static library issues.  
+
+**Usage:**
+- Linker records a reference in the executable instead of copying code.  
+- At runtime, the **dynamic linker** loads required shared libraries and resolves function calls.
+
+**Advantages:**
+1. **Memory efficiency:** Single copy of the library code shared by all programs.  
+2. **Disk space saving:** Only one compiled version exists.  
+3. **Easy updates:** Rebuilding the shared library updates all programs automatically the next time they run.
+
+---
+
+### Key Takeaways
+- **Static libraries:** faster startup, but duplicate code, higher memory use, more maintenance.  
+- **Shared libraries:** memory and disk efficient, easier updates, uses **dynamic linking** at runtime.
+
+
+
