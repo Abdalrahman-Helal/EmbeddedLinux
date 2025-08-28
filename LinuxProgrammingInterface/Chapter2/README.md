@@ -815,3 +815,26 @@ The **master device** is controlled by another program, which can send input to 
 - Applications that need to **emulate a terminal**.  
 
 ---
+## 2.16 Date and Time
+---
+
+Processes in UNIX are measured using two main types of time:
+
+### 1. Real Time (Wall Clock Time)
+- The actual passage of time, like what you see on a clock.  
+- Can be:  
+  - **Calendar Time**: Measured in seconds since the **Epoch** (January 1, 1970, UTC).  
+  - **Elapsed Time**: The duration a process has been running.  
+
+### 2. Process Time (CPU Time)
+- The amount of CPU resources consumed by a process.  
+- Divided into:  
+  - **System CPU Time** → time spent executing code in **kernel mode** (e.g., system calls).  
+  - **User CPU Time** → time spent executing code in **user mode** (program logic).  
+
+### The `time` Command
+The `time` command reports:  
+- **Real Time** (overall duration)  
+- **System CPU Time**  
+- **User CPU Time**
+
