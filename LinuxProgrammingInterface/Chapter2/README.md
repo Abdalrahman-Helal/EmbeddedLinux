@@ -474,7 +474,7 @@ A process can terminate in two ways:
 ### The init Process
 * Created by the kernel at **boot time** from `/sbin/init`.  
 * Known as the **“parent of all processes”**, all processes descend from it.  
-* Always has **PID = 1**, runs with **superuser privileges**.   
+* Always has **PID = 1**, runs with **superuser privileges**.  
 * Cannot be killed; terminates only on system shutdown.  
 * **Main role:** create/manage essential system processes for a running system.
 
@@ -503,3 +503,30 @@ A process can terminate in two ways:
 * **Common uses:**  
   - `HOME` → user’s login directory.  
   - `PATH` → directories to search for executables.
+
+
+---
+
+### Resource Limits
+
+* Each process consumes **resources** such as open files, memory, and CPU time.  
+* The `setrlimit()` system call allows a process to **set upper limits** on its resource usage.  
+
+#### Resource Limit Types
+* **Soft limit:** Maximum resource usage under normal conditions.  
+* **Hard limit:** Ceiling for the soft limit; cannot be exceeded.  
+
+#### Rules
+* **Unprivileged processes:**  
+  - Can change the soft limit **up to the hard limit**.  
+  - Can **only lower the hard limit**.  
+* **Inheritance:**  
+  - Processes created via `fork()` inherit **copies of their parent’s resource limits**.  
+
+#### Shell Usage
+* Resource limits in shells can be adjusted using:  
+  - `ulimit` command in **Bash**  
+  - `limit` command in **C shell**  
+* Child processes **inherit the shell’s resource limits** when executing commands.  
+
+---
