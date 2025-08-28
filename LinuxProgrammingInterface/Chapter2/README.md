@@ -794,5 +794,24 @@ $ ls -l | sort -k5n | less
   - Move jobs between foreground and background.
 - Make managing multiple processes easier in interactive sessions.
 
+---
+## 2.15 Pseudoterminals
+---
 
+A **pseudoterminal (PTY)** is a pair of connected virtual devices:  
+- **Master** side  
+- **Slave** side  
 
+The **slave device** behaves like a real terminal. This allows terminal-based programs (such as shells or editors) to run on it as if they were connected to a physical terminal.  
+The **master device** is controlled by another program, which can send input to the slave and read its output. In this way, the master acts like a “user” typing at a terminal.
+
+### How it works
+- Output from the driver program (on the master) undergoes normal terminal input processing and is passed to the program on the slave.  
+- Anything written by the program on the slave is processed as terminal output and delivered back to the driver program on the master.  
+
+### Key Uses
+- Terminal windows in graphical environments (e.g., **X Window System**).  
+- Remote login tools (e.g., **telnet**, **ssh**).  
+- Applications that need to **emulate a terminal**.  
+
+---
