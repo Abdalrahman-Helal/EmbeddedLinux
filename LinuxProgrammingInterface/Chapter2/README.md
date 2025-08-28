@@ -609,7 +609,7 @@ It simplifies program creation and maintenance. UNIX systems provide two main ty
 - **Shared libraries:** memory and disk efficient, easier updates, uses **dynamic linking** at runtime.
 
 ---
-### 2.10 Interprocess Communication and Synchronization
+## 2.10 Interprocess Communication and Synchronization
 ---
 
 **Context:**  
