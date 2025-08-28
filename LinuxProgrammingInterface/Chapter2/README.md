@@ -704,4 +704,33 @@ When a process receives a signal, it may:
 - Signals can also be **blocked** via the process’s signal mask. Blocked signals remain pending until unblocked.
 
 ---
+## 2.12 Threads
+---
+
+### Definition
+- A **thread** is a single execution flow within a process.  
+- Modern UNIX systems allow a process to have **multiple threads** sharing the same virtual memory and other resources.
+
+### Thread Memory Layout
+- Threads share:
+  - **Program code**
+  - **Global data**
+  - **Heap memory**
+- Each thread has its **own stack** for:
+  - Local variables
+  - Function call information
+
+### Communication and Synchronization
+- Threads communicate via **shared global variables**.  
+- **Threading API** provides:
+  - **Mutexes** – for mutual exclusion
+  - **Condition variables** – for signaling between threads
+- Threads can also use **IPC mechanisms** (Section 2.10) for inter-thread communication.
+
+### Advantages of Threads
+- Easy **data sharing** between cooperating threads
+- Some algorithms are **naturally multithreaded**
+- Multithreaded programs can **utilize multiple processors** for parallel execution
+- Lower overhead than creating multiple processes
+
 
