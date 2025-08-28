@@ -871,3 +871,32 @@ Multiple clients can communicate with a single or a few servers. They may run:
 * **Control & Coordination:** Centralized management ensures consistent access and prevents conflicts (e.g., two clients updating the same data simultaneously).
 * **Security:** Resources are protected and accessible only to authorized clients; centralization simplifies applying policies and monitoring usage.
 * **Heterogeneous Environment:** Clients and servers can run on different hardware and operating systems but still interact through standard protocols.
+
+---
+## 2.18 Realtime
+----
+Realtime applications are programs that must respond to inputs **within a guaranteed deadline**. The inputs often come from **sensors or specialized devices**, and the outputs usually control external hardware.
+
+**Examples include:**
+
+* Automated assembly lines
+* Bank ATMs
+* Aircraft navigation systems
+
+The key point is **not just speed**, but the **guarantee** that the response will always happen within the required time.
+
+Most general-purpose operating systems (like traditional UNIX) are **not realtime**, because their focus is on multitasking and multiuser environments. However, **realtime variants** exist:
+
+* Realtime versions of UNIX and Linux
+* Modern Linux kernels moving toward full realtime support
+
+To enable realtime responsiveness, **POSIX.1b** introduced extensions such as:
+
+* Asynchronous I/O
+* Shared memory and memory-mapped files
+* Memory locking
+* Realtime clocks and timers
+* Alternative scheduling policies
+* Realtime signals, message queues, and semaphores
+
+👉 In this book, **“real time”** refers to calendar or elapsed time, while **“realtime”** refers to systems/applications that provide guaranteed timely responses.
