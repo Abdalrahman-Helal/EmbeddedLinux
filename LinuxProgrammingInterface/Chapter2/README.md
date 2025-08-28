@@ -758,7 +758,41 @@ $ ls -l | sort -k5n | less
 - Job-control shells operate on **process groups**, sending **signals to all processes** in the group simultaneously.
 
 ---
+## 2.14 Sessions, Controlling Terminals, and Controlling Processes
+---
 
+### Sessions
+- A **session** is a collection of **process groups (jobs)**.
+- Each session has a **session ID**, which is the **PID of the session leader** (the process that creates the session).
+- Job-control shells use sessions to manage all processes they start, keeping them organized under one session.
+
+### Controlling Terminals
+- A **controlling terminal** is the terminal associated with a session.
+- It is assigned when the **session leader first opens a terminal device**.
+- For interactive shells, this is usually the terminal where the user logged in.
+- A terminal can be the controlling terminal for **only one session** at a time.
+
+### Controlling Process
+- The **session leader** becomes the **controlling process** for the terminal.
+- If the terminal disconnects (e.g., terminal window closed), the controlling process receives a **SIGHUP** signal.
+
+### Foreground and Background Jobs
+- **Foreground process group (foreground job):**
+  - Can read input from and write output to the terminal.
+  - Receives signals from terminal characters:
+    - **Ctrl-C** → kills the foreground group.
+    - **Ctrl-Z** → suspends the foreground group.
+
+- **Background process groups (background jobs):**
+  - Run without interacting with the terminal.
+  - Created by appending `&` to a command.
+
+### Job-Control Shells
+- Allow users to:
+  - List all jobs.
+  - Send signals to jobs.
+  - Move jobs between foreground and background.
+- Make managing multiple processes easier in interactive sessions.
 
 
 
