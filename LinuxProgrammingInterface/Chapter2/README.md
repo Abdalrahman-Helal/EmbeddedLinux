@@ -900,3 +900,26 @@ To enable realtime responsiveness, **POSIX.1b** introduced extensions such as:
 * Realtime signals, message queues, and semaphores
 
 👉 In this book, **“real time”** refers to calendar or elapsed time, while **“realtime”** refers to systems/applications that provide guaranteed timely responses.
+
+
+---
+## 2.19 The /proc File System
+---
+
+The **/proc file system** in Linux is a **virtual file system** that provides access to kernel data structures through files and directories under `/proc`.  
+It looks like a normal file system, but its files are generated dynamically by the kernel to expose system and process information.
+
+### Key Points
+- **Virtual file system:** No data is stored on disk; contents are created on demand by the kernel.  
+- **System interface:** Provides an easy way to view or modify system attributes.  
+- **Process directories:** Each running process has a directory `/proc/PID` containing details such as memory, status, and open file descriptors.  
+- **Text format:** Most `/proc` files are human-readable, making them easy to parse with shell scripts.  
+- **Privileges:** Modifying `/proc` files usually requires root privileges.  
+- **Linux-specific:** `/proc` is not standardized; its details vary across Linux versions.  
+
+### Usage Examples
+- `cat /proc/cpuinfo` → View CPU details.  
+- `cat /proc/meminfo` → Check memory usage.  
+- `ls /proc/<PID>` → Inspect information about a specific process.  
+
+---
