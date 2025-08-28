@@ -838,3 +838,36 @@ The `time` command reports:
 - **System CPU Time**  
 - **User CPU Time**
 
+---
+## 2.17 Client-Server Architecture
+---
+
+A **client-server application** is divided into two main components:
+
+* **Client:** Sends a request to the server asking for a service.
+* **Server:** Processes the request, performs the required actions, and sends a response back to the client.
+
+Sometimes, the client and server engage in multiple request-response exchanges. Typically:
+
+* The **client** interacts with the user.
+* The **server** manages and provides access to shared resources.
+
+Multiple clients can communicate with a single or a few servers. They may run:
+
+* On the **same host**, or
+* On **different hosts** connected through a network, using IPC mechanisms.
+
+### Examples of Server Services
+
+* Database or shared information access.
+* Remote file access across a network.
+* Encapsulation of business logic.
+* Access to shared hardware (e.g., a printer).
+* Serving web pages.
+
+### Benefits of Using a Server
+
+* **Efficiency:** One shared resource (like a printer) is cheaper and easier to manage than providing it locally to each client.
+* **Control & Coordination:** Centralized management ensures consistent access and prevents conflicts (e.g., two clients updating the same data simultaneously).
+* **Security:** Resources are protected and accessible only to authorized clients; centralization simplifies applying policies and monitoring usage.
+* **Heterogeneous Environment:** Clients and servers can run on different hardware and operating systems but still interact through standard protocols.
