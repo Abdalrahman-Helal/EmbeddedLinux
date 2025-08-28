@@ -612,7 +612,7 @@ It simplifies program creation and maintenance. UNIX systems provide two main ty
 ## 2.10 Interprocess Communication and Synchronization
 ---
 
-**Context:**  
+**Context:**   
 - A Linux system runs many processes, mostly independent.  
 - Some processes need to **cooperate**, requiring **communication** and **synchronization**.  
 
@@ -667,4 +667,41 @@ It simplifies program creation and maintenance. UNIX systems provide two main ty
 
 **Key Takeaway:**  
 - IPC mechanisms evolved to meet **different UNIX standards** and **application requirements**, offering flexibility and performance for process communication and synchronization.
+
+---
+## 2.11 Signals
+---
+
+## Definition
+- Signals are like **software interrupts**. They notify a process that an event or exceptional condition has occurred.
+- Each signal has a **unique integer identifier**, usually defined as `SIGxxxx`.
+
+### Sources of Signals
+1. **Kernel**: 
+   - User pressed **Ctrl-C**.
+   - A child process terminated.
+   - A timer/alarm expired.
+   - Invalid memory access attempted.
+2. **Other processes**: via `kill()` system call.
+3. **Self**: a process can send a signal to itself.
+
+### Signal Delivery Actions
+When a process receives a signal, it may:
+- **Ignore** it.
+- **Be killed** by it.
+- **Suspend** until resumed by a special signal.
+
+### Custom Handling
+- Programs can **override default actions** by:
+  1. Ignoring the signal.
+  2. Defining a **signal handler** – a function automatically invoked when the signal is received.
+
+### Pending Signals
+- If a signal is generated but not yet delivered, it is **pending**.
+- Pending signals are delivered:
+  - Immediately if the process is running.
+  - When the process is next scheduled.
+- Signals can also be **blocked** via the process’s signal mask. Blocked signals remain pending until unblocked.
+
+---
 
