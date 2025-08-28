@@ -1,10 +1,16 @@
 # Linux Programming Interface Chapter 2 Notes
 
+---
+
 ## 2.1 The Core Operating System: The Kernel
+
+---
 
 ### Kernel Definition
 
 **The kernel is the central part of an operating system that manages the computer’s hardware resources (CPU, memory, devices) and provides a software layer for programs to use those resources safely and efficiently.**
+
+---
 
 ### Two Meanings of Operating System
 
@@ -15,18 +21,26 @@
 
    * Only the central software (kernel) that manages and allocates hardware resources.
 
+---
+
 ### Importance of the Kernel
 
 * Simplifies programming and resource management.
 * Acts as a software layer between hardware and programs.
 * Increases the power and flexibility available to programmers.
 
+---
+
 ### Linux Kernel Location and Naming
 
 * Typically located at `/boot/vmlinuz`.
 * Linux: `vmlinuz` (z = compressed executable)
 
+---
+
 ## Tasks Performed by the Kernel
+
+---
 
 1. **Process Scheduling:**
 
@@ -72,7 +86,11 @@
      * Personal storage, CPU share, virtual address space, device/network access.
    * Kernel resolves hardware conflicts invisibly to users.
 
+---
+
 ## Kernel Mode and User Mode
+
+---
 
 1. **Two CPU Modes:**
 
@@ -97,7 +115,11 @@
    * User processes cannot accidentally or maliciously access kernel instructions or data.
    * Prevents actions that could crash or destabilize the system.
 
+---
+
 ## Process versus Kernel Views of the System
+
+---
 
 1. **Process Viewpoint:**
 
@@ -138,7 +160,11 @@
      * “A process terminates with `exit()`”
    * What actually happens: **the process requests the kernel to perform these actions**, and the kernel executes them.
 
+---
+
 ## 2.2 The Shell
+
+---
 
 1. **Definition:**
 
@@ -165,7 +191,11 @@
 
    * Shells interpret **shell scripts** with programming features: variables, loops, conditionals, I/O commands, functions.
 
+---
+
 ## 2.3 Users and Groups
+
+---
 
 ### Users
 
@@ -173,21 +203,31 @@
 * Defined in `/etc/passwd` with GID, home directory, login shell.
 * Passwords in `/etc/passwd` or **shadow file** for security.
 
+---
+
 ### Groups
 
 * Organize users for access control.
 * Users can belong to multiple groups.
 * Defined in `/etc/group` with group name, GID, user list.
 
+---
+
 ### Superuser
 
 * User ID 0, usually `root`.
 * Can bypass permission checks and access any file/process.
 
+---
+
 ## 2.4 Single Directory Hierarchy, Directories, Links, and Files
+
+---
 
 * Linux uses a **single hierarchical directory structure** with the **root `/`** at the base.
 * All files and directories are **children or descendants of root**.
+
+---
 
 ### File Types
 
@@ -195,6 +235,8 @@
 
   * **Regular files:** Ordinary data files (text, programs, images).
   * **Other types:** Directories, devices, pipes, sockets, symbolic links.
+
+---
 
 ### Directories and Links
 
@@ -207,6 +249,8 @@
   * `..` → link to its parent directory
 * Root directory (`/`) has `..` pointing to itself.
 
+---
+
 ### Symbolic Links
 
 * A **symbolic link (soft link)** is a special file that contains the **name of another file** (its target).
@@ -214,6 +258,8 @@
 * Can happen **recursively** if the target is also a symbolic link.
 * If the target file doesn’t exist, it is called a **dangling link**.
 * **Terminology:** Hard link → normal link, Soft link → symbolic link.
+
+---
 
 ### Filenames and Pathnames
 
@@ -233,7 +279,9 @@
 * Absolute pathname: starts with `/` (e.g., `/home/mtk/.bashrc`).
 * Relative pathname: relative to **current working directory** (e.g., `include/sys/types.h`).
 
-**Current Working Directory (cwd)**
+---
+
+### Current Working Directory (cwd)
 
 * Each process has a cwd.
 * Relative pathnames are interpreted from cwd.
@@ -241,7 +289,11 @@
 * Login shell starts in **user’s home directory**.
 * Can be changed using `cd` command.
 
+---
+
 ## 2.5 File Ownership and Permissions
+
+---
 
 1. **Ownership**
 
@@ -269,7 +321,11 @@
      * Write → can modify directory contents (add/remove files).
      * Execute → can access files within the directory (if permissions allow).
 
+---
+
 ## 2.6 Programs
+
+---
 
 ### Forms of Programs
 * **Source code:** Human-readable text written in a programming language (e.g., C).  
@@ -277,12 +333,16 @@
 * **Scripts:** Special case – text files with commands interpreted directly by a program (like a shell).  
 * Normally, “program” refers to the executable form (binary), since it is semantically equivalent to the source code.
 
+---
+
 ### Filters
 * A **filter** is a program that:
   - Reads input from **stdin**.
   - Performs some transformation.
   - Writes output to **stdout**.  
 * Examples: `cat`, `grep`, `tr`, `sort`, `wc`, `sed`, `awk`.
+
+---
 
 ### Command-line Arguments
 * In C, programs can access arguments passed when the program is run.  
@@ -296,7 +356,11 @@ int main(int argc, char *argv[])
 * `argv[]` → array of strings for each argument.  
 * `argv[0]` → name of the program itself.
 
+---
+
 ## 2.7 Processes
+
+---
 
 ### Definition
 * A **process** is an **instance of an executing program**.  
@@ -304,8 +368,9 @@ int main(int argc, char *argv[])
   - The **kernel** loads its code into virtual memory.
   - Allocates space for **variables**.
   - Sets up **kernel bookkeeping** (process ID, user ID, group ID, termination status, etc.).
+* From the kernel’s view, processes are entities among which resources like **CPU, memory, and network bandwidth** are shared.
 
-* From the kernel’s view, processes are the entities among which resources like **CPU, memory, and network bandwidth** are shared.
+---
 
 ### Process Memory Layout
 A process’s memory is divided into **segments**:
@@ -314,6 +379,8 @@ A process’s memory is divided into **segments**:
 2. **Data segment:** Static variables.  
 3. **Heap:** Dynamically allocated memory.  
 4. **Stack:** Memory for local variables, function calls, and return addresses.
+
+---
 
 ### Process Creation and Execution
 * A process can create a new process using `fork()`.  
@@ -325,37 +392,114 @@ A process’s memory is divided into **segments**:
 * After creation, the child process can:
   - Continue executing the same program with different behavior, or  
   - Use `execve()` to **load a new program**, which replaces:
-    - Text, data, stack, and heap with the new program’s segments.
+    - Text, data, stack, and heap with the new program’s segments.  
 
 * **C library functions** built on top of `execve()` (all start with `exec`) offer similar functionality.  
-  - No function literally named `exec()` exists; it’s just a shorthand term.
+  - No function literally named `exec()` exists; it’s just shorthand.
+
+---
 
 ### Process ID (PID) and Parent Process ID (PPID)
+* **PID:** Unique integer identifier for each process.  
+* **PPID:** PID of the process that created it (usually via `fork()`).  
+* Allows the kernel (and user) to track process relationships.
 
-* **PID:** Every process has a unique integer identifier called the Process ID.
-* **PPID:** Each process also has a Parent Process ID, which is the PID of the process that created it (usually via `fork()`).
-
-This allows the kernel (and you) to track process relationships.
+---
 
 ### Process Termination and Termination Status
-
 A process can terminate in two ways:
 
-1. **Request its own termination** using `_exit()` (or the `exit()` library function).
-2. **Be killed by a signal** sent to it (like `SIGKILL`).
+1. **Request its own termination** using `_exit()` (or `exit()` library function).  
+2. **Be killed by a signal** sent to it (like `SIGKILL`).  
 
-When a process terminates, it yields a **termination status**:
+* When a process terminates, it yields a **termination status**:
+  - A small nonnegative integer read by the parent using `wait()`.
+  - `_exit(status)` sets the status explicitly.
+  - If killed by a signal, status reflects the signal.
 
-* A small nonnegative integer that the parent process can read using `wait()`.
-* If `_exit(status)` is called, the process sets this status explicitly.
-* If killed by a signal, the status reflects the signal that caused termination.
+* **Exit convention:**
+  - `0` → Success.
+  - Nonzero → Error occurred.
 
-**Exit convention:**
+* Most shells store the last program’s termination status in the `$?` variable.
 
-* `0` → Success.
-* Nonzero → Some error occurred.
+---
 
-Most shells store the last program’s termination status in the `$?` variable.
+## Process User and Group Identifiers (Credentials)
 
+* Every process in UNIX/Linux has **user IDs (UIDs)** and **group IDs (GIDs)** to control access.
 
+---
 
+### Real User ID (RUID) and Real Group ID (RGID)
+* Identify the user and group that own the process.  
+* Inherited from parent process.  
+* Login shell gets RUID and RGID from the system password file.
+
+---
+
+### Effective User ID (EUID) and Effective Group ID (EGID)
+* Determine permissions for accessing files or resources.  
+* Usually **EUID = RUID** and **EGID = RGID**.  
+* Changing EUID/EGID allows process to assume privileges of another user/group.
+
+---
+
+### Supplementary Group IDs
+* Identify additional groups the process belongs to.  
+* Inherited from parent process.  
+* Login shell gets supplementary groups from system group file.
+
+---
+
+### Privileged Processes
+* **Privileged process:** **EUID = 0 (superuser)** → bypasses normal permission checks.  
+* **Unprivileged process:** **EUID ≠ 0**, must follow normal permissions.
+
+**How a process can become privileged:**
+1. Created by another privileged process.  
+2. **Set-user-ID (SUID) mechanism:** Process assumes EUID of program file owner during execution.
+
+---
+
+### Capabilities
+* Linux divides **superuser privileges** into smaller units called **capabilities**.  
+* Each privileged operation requires a **specific capability**.  
+* Traditional superuser (EUID = 0) has all capabilities enabled.  
+* Granting a **subset of capabilities** allows a process to perform some, but not all, superuser operations.  
+* Capability names start with `CAP_` (e.g., `CAP_KILL`).
+
+---
+
+### The init Process
+* Created by the kernel at **boot time** from `/sbin/init`.  
+* Known as the **“parent of all processes”**, all processes descend from it.  
+* Always has **PID = 1**, runs with **superuser privileges**.   
+* Cannot be killed; terminates only on system shutdown.  
+* **Main role:** create/manage essential system processes for a running system.
+
+---
+
+### Daemon Processes
+* **Daemon:** Background process for special purposes.  
+* **Characteristics:**  
+  - Long-lived: runs from system boot until shutdown.  
+  - No controlling terminal (runs in background).  
+* **Examples:**  
+  - `syslogd` – system logs.  
+  - `httpd` – web server.
+
+---
+
+### Environment List
+* Each process has an **environment list**, a set of **environment variables** (name-value pairs) stored in user-space memory.  
+* **Inheritance:**  
+  - `fork()` → copy of parent’s environment.  
+  - `exec()` → new program can inherit or receive new environment.  
+* **Creating variables in shells:**  
+  - Bash: `$ export MYVAR='Hello world'`  
+  - C shell: `setenv MYVAR 'Hello world'`  
+* **Access in C programs:** `char **environ` or library functions.  
+* **Common uses:**  
+  - `HOME` → user’s login directory.  
+  - `PATH` → directories to search for executables.
