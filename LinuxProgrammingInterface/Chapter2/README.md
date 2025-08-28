@@ -734,3 +734,31 @@ When a process receives a signal, it may:
 - Lower overhead than creating multiple processes
 
 
+---
+## 2.13 Process Groups and Shell Job Control
+---
+
+### Process Groups
+- Each program executed by the shell runs in a **new process**.  
+- Processes in the same **pipeline** are placed in a **process group**.  
+- Example pipeline:
+```bash
+$ ls -l | sort -k5n | less
+```
+
+### Process Groups
+- All three commands run as **separate processes** but in **one process group**.  
+- Each process group has a **process group ID (PGID)**, usually the **PID of the group leader**.
+
+### Shell Job Control
+- Most modern shells (except Bourne shell) provide **interactive job control**.  
+- Job control allows the user to:
+  - Execute **multiple commands simultaneously**.
+  - **Suspend or resume commands**.  
+- Job-control shells operate on **process groups**, sending **signals to all processes** in the group simultaneously.
+
+---
+
+
+
+
