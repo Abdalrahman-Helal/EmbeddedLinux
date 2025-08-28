@@ -530,3 +530,35 @@ A process can terminate in two ways:
 * Child processes **inherit the shell’s resource limits** when executing commands.  
 
 ---
+## 2.8 Memory Mappings
+---
+
+The `mmap()` system call creates a new memory mapping in the calling process’s virtual address space. Mappings allow direct memory access instead of using traditional read/write system calls.
+
+#### Types of Mappings
+
+1. **File Mapping**  
+   * Maps a region of a file into the process’s memory.  
+   * The file’s contents can be accessed like memory.  
+   * Pages are loaded automatically from the file on demand.  
+
+2. **Anonymous Mapping**  
+   * Not linked to any file.  
+   * Pages are initialized to zero.  
+
+#### Sharing Between Processes
+
+* Mappings can be shared with other processes either because:
+  - Two processes map the same file region, or  
+  - A child process created by `fork()` inherits its parent’s mapping.  
+* **Private mapping:** Changes are local to the process; not reflected in the file or other processes.  
+* **Shared mapping:** Changes are visible to other processes sharing the mapping and written to the underlying file.  
+
+#### Common Uses
+
+* Initialize a process’s text segment from an executable file.  
+* Allocate new zero-filled memory.  
+* Perform file I/O efficiently using memory-mapped I/O.  
+* Enable interprocess communication via shared memory regions.
+
+---
