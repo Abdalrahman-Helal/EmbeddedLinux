@@ -923,3 +923,8 @@ It looks like a normal file system, but its files are generated dynamically by t
 - `ls /proc/<PID>` → Inspect information about a specific process.  
 
 ---
+# 2.20 Summary
+---
+
+In this chapter, we **surveyed a range of fundamental concepts** related to Linux system programming.  
+An understanding of these concepts should provide readers with **limited experience on Linux or UNIX** with enough background to begin **learning system programming**.
