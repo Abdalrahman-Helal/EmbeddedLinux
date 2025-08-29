@@ -139,8 +139,8 @@ Steps in the execution of a system call (example with `execve()`):
 ![Figure 3-1: Steps in the execution of a system call](./images/figure3-1.png)
 
 ---
-
 ## 3.2 Library Functions
+---
 
 * **Definition:**
   Functions provided by the **standard C library** (libc).
@@ -166,4 +166,53 @@ Steps in the execution of a system call (example with `execve()`):
 
 * **Key Idea:**
 Library functions often **abstract away low-level system calls** to make programming **simpler, safer, and more portable**.
+
+
+## 3.3 The Standard C Library; The GNU C Library (glibc)
+
+- **Standard C Library Implementations:**  
+  - Different UNIX systems have different implementations.  
+  - On Linux, the most common is **GNU C Library (glibc)** → [https://www.gnu.org/software/libc/](http://www.gnu.org/software/libc/).  
+  - Other lightweight alternatives (mainly for embedded systems):  
+    - **uClibc** → [http://www.uclibc.org/](http://www.uclibc.org/)  
+    - **diet libc** → [http://www.fefe.de/dietlibc/](http://www.fefe.de/dietlibc/)  
+
+- **glibc Maintainers:**  
+  - Initially: **Roland McGrath**  
+  - Later: **Ulrich Drepper**  
+
+- **Why glibc?**  
+  - Used by **most Linux applications**, so this book focuses on it.  
+
+---
+
+### Determining glibc Version  
+
+1. **From shell (executing library):**  
+   ```bash
+   /lib/libc.so.6
+   ```
+   → Prints version info, copyright, compiler, extensions.
+
+2. **If libc.so.6 is elsewhere:**  
+   - Use `ldd` (list dynamic dependencies) on any dynamically linked program:  
+     ```bash
+     ldd /bin/ls | grep libc
+     ```
+     → Shows the path of `libc.so.6`.
+
+3. **From source code:**  
+
+   - **Compile-time check:**  
+     - Macros:  
+       - `__GLIBC__` → major version  
+       - `__GLIBC_MINOR__` → minor version  
+     - Example: glibc 2.12 → values `2` and `12`.  
+     - ⚠️ Limitation: only reliable if compiled and run on the same system.  
+
+   - **Run-time check:**  
+     - `gnu_get_libc_version()` → returns version string (e.g., `"2.12"`).  
+     - `confstr(_CS_GNU_LIBC_VERSION, ...)` → returns string (e.g., `"glibc 2.12"`).  
+     
+---
 
