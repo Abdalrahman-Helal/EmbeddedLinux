@@ -139,3 +139,31 @@ Steps in the execution of a system call (example with `execve()`):
 ![Figure 3-1: Steps in the execution of a system call](./images/figure3-1.png)
 
 ---
+
+## 3.2 Library Functions
+
+* **Definition:**
+  Functions provided by the **standard C library** (libc).
+
+* **Purpose:**
+  Handle diverse tasks like:
+
+  * Opening files (`fopen`)
+  * Converting time to readable format
+  * Comparing strings (`strcmp`)
+  * Allocating memory (`malloc`, `free`)
+
+* **Relation to system calls:**
+
+  * Some library functions **don’t use system calls** (e.g., string manipulation functions like `strlen`, `strcpy`).
+  * Others are **wrappers around system calls**, offering a friendlier interface.
+
+* **Examples:**
+
+  * `fopen()` → uses the `open()` system call.
+  * `printf()` → uses `write()` but adds formatting & buffering.
+  * `malloc()` / `free()` → manage memory using the `brk()` system call, but add bookkeeping for ease.
+
+* **Key Idea:**
+Library functions often **abstract away low-level system calls** to make programming **simpler, safer, and more portable**.
+
