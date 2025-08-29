@@ -243,7 +243,7 @@ if (close(fd) == -1) {
     /* Handle error */
 }
 ```
-
+  
 ## errno basics
 
 - On failure, a system call sets the **global integer `errno`** to a **positive error code**.  
@@ -341,6 +341,246 @@ char *strerror(int errnum);
    - Error detection depends on the function itself.  
    - Do **not** use `errno`, `perror()`, or `strerror()` to diagnose these errors.  
    - Always consult the function’s manual page.
+
+---
+## 3.5 Notes on Example Programs
+
+## 3.5.1 Command-Line Options and Arguments
+---
+Many example programs rely on command-line options to control behavior.
+
+### UNIX style options
+
+* Start with a single hyphen `-` followed by a letter (e.g., `-a`).
+* May include an optional argument.
+
+### GNU style options
+
+* Start with two hyphens `--` followed by a word (e.g., `--help`).
+* May also include an optional argument.
+
+Programs usually provide a help option (`--help`) that prints usage instructions.
+
+To parse command-line options, the programs use the standard C library function `getopt()`.
+
+---
+## 3.5.2 Common Functions and Header Files
+---
+
+* Most example programs include a common header file with frequently used definitions and functions.
+* **Purpose of the header file:**
+
+  * Includes other header files often needed.
+  * Defines a Boolean type.
+  * Provides macros for min and max calculations.
+  * Helps make example programs shorter and cleaner.
+
+**Example header file (`lib/tlpi_hdr.h`):**
+
+```c
+#ifndef TLPI_HDR_H
+#define TLPI_HDR_H /* Prevent double inclusion */
+
+#include <sys/types.h>   /* Common type definitions */
+#include <stdio.h>       /* Standard I/O */
+#include <stdlib.h>      /* Standard library functions + EXIT_SUCCESS/EXIT_FAILURE */
+#include <unistd.h>      /* System call prototypes */
+#include <errno.h>       /* errno and error constants */
+#include <string.h>      /* String-handling functions */
+#include "get_num.h"     /* Functions for numeric arguments (getInt(), getLong()) */
+#include "error_functions.h" /* Error-handling functions */
+
+typedef enum { FALSE, TRUE } Boolean;
+
+#define min(m,n) ((m) < (n) ? (m) : (n))
+#define max(m,n) ((m) > (n) ? (m) : (n))
+
+#endif
+```
+
+* Using this file reduces repetitive code in programs.
+
+
+## Error-Diagnostic Functions
+
+* To simplify error handling, example programs use a set of error-diagnostic functions.
+* Declared in the header file: `lib/error_functions.h`.
+
+**Example declarations:**
+
+```c
+#ifndef ERROR_FUNCTIONS_H
+#define ERROR_FUNCTIONS_H
+
+void errMsg(const char *format, ...);
+
+#ifdef __GNUC__
+/* Stops 'gcc -Wall' warning about control reaching end of non-void function */
+#define NORETURN __attribute__ ((__noreturn__))
+#else
+#define NORETURN
+#endif
+
+void errExit(const char *format, ...) NORETURN;
+void err_exit(const char *format, ...) NORETURN;
+void errExitEN(int errnum, const char *format, ...) NORETURN;
+void fatal(const char *format, ...) NORETURN;
+void usageErr(const char *format, ...) NORETURN;
+void cmdLineErr(const char *format, ...) NORETURN;
+
+#endif
+```
+
+* Functions with `NORETURN` terminate the program and never return.
+* Using these functions makes error handling consistent and simpler across programs.
+
+
+### 1. errMsg()
+
+* Prints an error message to **standard error**.
+* Works like `printf()`, but automatically appends a **newline**.
+* Prints:
+
+  * The error name (e.g., `EPERM`)
+  * Error description from `strerror()`
+  * Formatted message from arguments.
+* **Does not terminate** the program.
+
+### 2. errExit()
+
+* Operates like `errMsg()`, **but terminates the program**.
+* Termination:
+
+  * Normally calls `exit()`.
+  * If the environment variable `EF_DUMPCORE` is defined and non-empty, calls `abort()` to produce a **core dump** for debugging.
+
+### 3. err\_exit()
+
+* Similar to `errExit()`, but differs in two key ways:
+
+  1. **Does not flush standard output** before printing the error message.
+  2. Calls `_exit()` instead of `exit()`.
+
+     * Terminates the process **immediately**, without flushing stdio buffers or calling exit handlers.
+* Useful for **child processes in libraries** that need to terminate due to errors **without affecting the parent’s output buffers or exit handlers**.
+
+### 4. errExitEN(int errnum, ...)
+
+* Similar to `errExit()`, but prints the error text for a **specific error number `errnum`** instead of the current `errno`.
+* Mainly used with **POSIX threads**, where functions return an **error number** instead of –1 on failure (0 indicates success).
+
+---
+
+### Diagnosing Errors in POSIX Threads
+
+* Traditional approach (using `errno`):
+
+```c
+errno = pthread_create(&thread, NULL, func, &arg);
+if (errno != 0)
+    errExit("pthread_create");
+```
+
+* **Problem:** Inefficient in threaded programs
+
+  * `errno` is a macro that expands into a function call returning a **modifiable lvalue**.
+  * Each use of `errno` triggers a function call.
+
+* **Better approach using `errExitEN()`:**
+
+```c
+int s;
+s = pthread_create(&thread, NULL, func, &arg);
+if (s != 0)
+    errExitEN(s, "pthread_create");
+```
+
+* `errExitEN()` uses the **returned error number** directly, avoiding extra function calls.
+
+### Additional Notes
+
+* In C, an **lvalue** refers to a storage location (e.g., a variable or `*p`).
+* In POSIX threads, `errno` is redefined as a function returning a **thread-specific storage pointer**, making direct use less efficient.
+
+
+### Other Error-Diagnostic Functions
+
+To diagnose errors not related to system calls or errno, we use the following functions:
+
+```c
+#include "tlpi_hdr.h"
+void fatal(const char *format, ...);
+void usageErr(const char *format, ...);
+void cmdLineErr(const char *format, ...);
+```
+
+### 1. fatal()
+
+* Diagnoses **general errors**, including errors from library functions that do not set `errno`.
+* Works like `printf()`, automatically appends a **newline**.
+* Prints to **standard error** and then **terminates the program** (like `errExit()`).
+
+### 2. usageErr()
+
+* Diagnoses **errors in command-line argument usage**.
+* Prints **`Usage:`** followed by the formatted message.
+* Terminates the program using `exit()`.
+* Some examples use an extended version named `usageError()`.
+
+### 3. cmdLineErr()
+
+* Similar to `usageErr()`, but specifically for **command-line argument errors**.
+* Prints **`Command-line usage error:`** followed by the formatted message.
+* Terminates the program using `exit()`.
+
+**Implementations** of these functions are provided in `lib/error_functions.c`.
+
+---
+
+## `ename.c.inc` – Symbolic Names for `errno`
+
+* **Purpose:**
+
+  * Defines an array of strings `ename[]` mapping **error numbers** to their **symbolic names** (e.g., `EPERM`, `ENOENT`).
+  * Used by error-handling functions (`errMsg()`, `errExit()`, etc.) to print **human-readable error names**.
+  * Workaround: `strerror()` provides only descriptions, not symbolic names.
+
+* **Architecture-Specific:**
+
+  * `errno` values differ across Linux hardware architectures.
+  * The example shown is for **Linux 2.6/x86-32**.
+  * Can regenerate for a specific platform using `lib/Build_ename.sh`.
+
+* **Notes on `ename[]` array:**
+
+  * Some strings are empty → correspond to **unused error values**.
+  * Some strings contain **two names separated by a slash** → when two symbolic names share the same numeric value.
+
+    * Example: `"EAGAIN/EWOULDBLOCK"`
+
+      * `EAGAIN`: System V, for nonblocking I/O, semaphores, message queues, file locks (`fcntl()`).
+      * `EWOULDBLOCK`: BSD, for nonblocking file locks (`flock()`) and socket calls.
+      * SUSv3 permits either for **nonblocking socket calls**; for others, only `EAGAIN` is specified.
+
+* **Array example (partial):**
+
+```c
+static char *ename[] = {
+    /* 0 */ "",
+    /* 1 */ "EPERM", "ENOENT", "ESRCH", "EINTR", "EIO", "ENXIO", "E2BIG",
+    /* 8 */ "ENOEXEC", "EBADF", "ECHILD", "EAGAIN/EWOULDBLOCK", "ENOMEM",
+    /* 13 */ "EACCES", "EFAULT", "ENOTBLK", "EBUSY", "EEXIST", "EXDEV",
+    ...
+};
+#define MAX_ENAME 132
+```
+
+* **Usage:**
+
+  * Error-handling functions look up `ename[err]` to print the **symbolic name** along with `strerror(err)` for easier reference to **manual pages**.
+
+
+
 
 
 
