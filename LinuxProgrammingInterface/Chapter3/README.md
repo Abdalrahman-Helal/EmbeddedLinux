@@ -167,8 +167,9 @@ Steps in the execution of a system call (example with `execve()`):
 * **Key Idea:**
 Library functions often **abstract away low-level system calls** to make programming **simpler, safer, and more portable**.
 
-
+---
 ## 3.3 The Standard C Library; The GNU C Library (glibc)
+---
 
 - **Standard C Library Implementations:**  
   - Different UNIX systems have different implementations.  
@@ -215,4 +216,132 @@ Library functions often **abstract away low-level system calls** to make program
      - `confstr(_CS_GNU_LIBC_VERSION, ...)` → returns string (e.g., `"glibc 2.12"`).  
      
 ---
+## 3.4 Handling Errors from System Calls and Library Functions
+---
+
+Most system calls and library functions return a value indicating **success or failure**.  
+You should **always check this return value**.  
+If the call failed → handle it (at least print an error message).  
+Ignoring these checks wastes hours of debugging.
+
+### System calls that (effectively) don’t fail
+- `getpid()` → always returns the process ID.  
+- `_exit()` → always terminates the process.
+
+---
+
+### Checking return values (typical pattern)
+Most system calls indicate failure with **`-1`**.
+
+```c
+int fd = open(pathname, flags, mode); /* system call to open a file */
+if (fd == -1) {
+    /* Handle error */
+}
+
+if (close(fd) == -1) {
+    /* Handle error */
+}
+```
+
+## errno basics
+
+- On failure, a system call sets the **global integer `errno`** to a **positive error code**.  
+- Include `<errno.h>` to get the declaration of `errno` and the error constants (all start with `E`, e.g., `EINTR`, `EACCES`, `ENOENT`).  
+- The **`ERRORS`** section of each man page lists possible `errno` values for that call.  
+
+### Important rules
+- A **successful call does not reset `errno`** to 0 → it may still hold an old nonzero value.  
+- Standards permit a **successful function to set `errno`** (rare).  
+- Therefore: **first check the function’s return value**. Only if it signals failure should you read `errno`.  
+
+### Example (diagnosing `read` failures)
+```c
+cnt = read(fd, buf, numbytes);
+if (cnt == -1) {
+    if (errno == EINTR) {
+        fprintf(stderr, "read was interrupted by a signal\n");
+    } else {
+        /* Some other error occurred */
+    }
+}
+```
+
+### Important Notes on `errno`
+
+- A successful system call does **not** reset `errno` to 0.  
+- Rarely, a successful system call may still change `errno`.  
+- **Correct approach**:  
+  - First check the return value.  
+  - Only then check `errno`.  
+
+### Special Case: System Calls Returning -1 Validly
+Some system calls (e.g., `getpriority()`) can return **-1** as a valid result.  
+To distinguish between a valid result and an error:  
+
+```c
+#include <errno.h>
+
+errno = 0;    /* Clear errno before the call */
+int result = getpriority(which, who);
+
+if (result == -1 && errno != 0) {
+    /* A real error occurred */
+}
+```
+
+### Printing Error Messages
+
+After a system call fails, you can print a descriptive message using `errno`.
+
+### perror()
+- Prints your custom message **+** description of `errno`.
+
+```c
+int fd = open(pathname, flags, mode);
+if (fd == -1) {
+    perror("open");
+    exit(EXIT_FAILURE);
+}
+```
+### strerror()
+- Returns the error string corresponding to the error number given in its `errnum` argument.
+
+```c
+#include <string.h>
+char *strerror(int errnum);
+```
+
+- The string returned may be **statically allocated**, meaning it could be **overwritten by subsequent calls** to `strerror()`.  
+- If `errnum` specifies an unrecognized error number:  
+  - Returns a string like `Unknown error nnn`.  
+  - Some implementations may return `NULL`.  
+- `perror()` and `strerror()` are **locale-sensitive**, so error descriptions are displayed in the local language.
+
+---
+
+### Handling Errors from Library Functions
+- Library functions return **different data types** and **different values** to indicate failure.  
+- Always check the **manual page** for each function.
+
+#### Categories of Library Functions
+
+1. **Functions that behave like system calls**  
+   - Return `-1` on error.  
+   - `errno` indicates the specific error.  
+   - **Example:** `remove()` → removes a file (uses `unlink()`) or directory (uses `rmdir()`).  
+   - Errors are diagnosed the same way as system calls.
+
+2. **Functions that return other values on error but still set errno**  
+   - **Example:** `fopen()` → returns `NULL` on error.  
+   - `errno` indicates which underlying system call failed.  
+   - Use `perror()` or `strerror()` to diagnose errors.
+
+3. **Functions that don’t use errno**  
+   - Error detection depends on the function itself.  
+   - Do **not** use `errno`, `perror()`, or `strerror()` to diagnose these errors.  
+   - Always consult the function’s manual page.
+
+
+
 
