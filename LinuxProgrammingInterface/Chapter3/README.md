@@ -326,7 +326,7 @@ char *strerror(int errnum);
 
 #### Categories of Library Functions
 
-1. **Functions that behave like system calls**  
+1. **Functions that behave like system calls**  .
    - Return `-1` on error.  
    - `errno` indicates the specific error.  
    - **Example:** `remove()` → removes a file (uses `unlink()`) or directory (uses `rmdir()`).  
@@ -578,8 +578,61 @@ static char *ename[] = {
 * **Usage:**
 
   * Error-handling functions look up `ename[err]` to print the **symbolic name** along with `strerror(err)` for easier reference to **manual pages**.
+----
 
+## Functions for Parsing Numeric Command-Line Arguments
 
+These functions provide safer alternatives to `atoi()`, `atol()`, and `strtol()` by performing **basic validity checks** on numeric arguments.
+
+### Header File (`lib/get_num.h`)
+
+```c
+#ifndef GET_NUM_H
+#define GET_NUM_H
+
+#define GN_NONNEG 01    /* Value must be >= 0 */
+#define GN_GT_0 02      /* Value must be > 0 */
+#define GN_ANY_BASE 0100 /* Can use any base, like strtol(3) */
+#define GN_BASE_8 0200   /* Value is expressed in octal */
+#define GN_BASE_16 0400  /* Value is expressed in hexadecimal */
+
+long getLong(const char *arg, int flags, const char *name);
+int getInt(const char *arg, int flags, const char *name);
+
+#endif
+```
+
+### Function Details
+
+* **`getInt(const char *arg, int flags, const char *name)`**
+
+  * Converts `arg` to an `int`.
+  * Checks that `arg` is a valid integer string (digits, `+`, `-`).
+  * Terminates the program if invalid.
+
+* **`getLong(const char *arg, int flags, const char *name)`**
+
+  * Converts `arg` to a `long`.
+  * Performs the same validation as `getInt()`.
+
+### Parameters
+
+* **`arg`**: String to convert.
+* **`flags`**: Control conversion and range checks.
+
+  * `GN_NONNEG`: Result must be >= 0.
+  * `GN_GT_0`: Result must be > 0.
+  * `GN_ANY_BASE`: Accept any numeric base.
+  * `GN_BASE_8`, `GN_BASE_16`: Force octal or hexadecimal.
+* **`name`**: Optional string identifying the argument for error messages.
+
+### Usage Notes
+
+* By default, **signed decimal integers** are expected.
+* Flags can restrict range or base.
+* Some example programs omit range checks intentionally to demonstrate invalid inputs.
+* Real-world applications should usually enforce stronger validation.
+-----
 
 
 
