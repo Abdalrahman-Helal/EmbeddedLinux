@@ -822,7 +822,17 @@ Header files required to prototype system calls and library functions can vary a
 * For simplicity, example programs on Linux may omit `<sys/types.h>`.
 
 ---
-
+## 3.7 Summary
+---
+* System calls allow processes to request services from the kernel.
+* Even simple system calls have significant overhead compared to user-space function calls due to kernel mode switching and argument verification.
+* The standard C library (usually glibc on Linux) provides many functions, some using system calls, others entirely in user space.
+* Always check status returns of system calls and library functions to detect errors.
+* Example helper functions introduced include error diagnosis (`fatal()`, `usageErr()`, `cmdLineErr()`) and command-line argument parsing (`getInt()`, `getLong()`).
+* Feature test macros can be defined during compilation to control which definitions are exposed by headers and ensure standard conformance.
+* Using standard system data types (e.g., `pid_t`, `uid_t`) instead of native C types improves portability across UNIX systems.
+* SUSv3 defines a wide range of system data types that should be used by portable applications.
+---
 
 
 
