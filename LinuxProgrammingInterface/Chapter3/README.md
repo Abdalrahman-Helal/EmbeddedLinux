@@ -632,7 +632,198 @@ int getInt(const char *arg, int flags, const char *name);
 * Flags can restrict range or base.
 * Some example programs omit range checks intentionally to demonstrate invalid inputs.
 * Real-world applications should usually enforce stronger validation.
+
 -----
+## 3.6 Portability Issues
+-----
+
+### 3.6.1 Feature Test Macros
+
+Feature test macros control which constants, types, and function declarations are exposed by header files, ensuring portability across UNIX systems and standards.
+
+#### Defining Feature Test Macros
+
+* In source code before headers:
+
+```c
+#define _BSD_SOURCE 1
+```
+
+* Or via compiler option:
+
+```bash
+$ cc -D_BSD_SOURCE prog.c
+```
+
+#### Standard Portable Macros
+
+* `_POSIX_SOURCE`: Expose POSIX.1-1990 and ISO C (1990).
+* `_POSIX_C_SOURCE`: Specify POSIX version; 1 = POSIX.1-1990, >=199309 = POSIX.1b (realtime), >=199506 = POSIX.1c (threads), 200112 = POSIX.1-2001 base, 200809 = POSIX.1-2008 base.
+* `_XOPEN_SOURCE`: Expose POSIX.1, POSIX.2, X/Open (XPG4). 500+ = SUSv2, 600+ = SUSv3 + C99, 700+ = SUSv4 XSI.
+
+#### glibc-Specific Macros
+
+* `_BSD_SOURCE`: Expose BSD definitions, also sets `_POSIX_C_SOURCE=199506`.
+* `_SVID_SOURCE`: Expose System V Interface Definition.
+* `_GNU_SOURCE`: Expose all above plus GNU extensions.
+
+#### Notes
+
+* Default GCC settings define: `_POSIX_SOURCE`, `_POSIX_C_SOURCE=200809` (adjusted per glibc version), `_BSD_SOURCE`, `_SVID_SOURCE`.
+* Defining multiple macros is additive.
+* Example explicit compiler invocation:
+
+```bash
+$ cc -D_POSIX_SOURCE -D_POSIX_C_SOURCE=199506 -D_BSD_SOURCE -D_SVID_SOURCE prog.c
+```
+
+#### POSIX/SUS Conformance
+
+* `_POSIX_C_SOURCE=200112` → POSIX.1-2001 base specification.
+* `_XOPEN_SOURCE=600` → SUSv3/XSI conformance.
+* `_POSIX_C_SOURCE=200809` → POSIX.1-2008 base.
+* `_XOPEN_SOURCE=700` → SUSv4/XSI.
+
+#### Compilation Example for Source Code Examples
+
+```bash
+$ cc -std=c99 -D_XOPEN_SOURCE=600
+```
+-----
+## System Data Types (SUSv3)
+-----
+
+### Why Not Use Plain `int` or `long`
+
+* Sizes vary across UNIX systems.
+
+  * Example: `long` = 4 bytes on one system, 8 bytes on another.
+* Different implementations may use different types for the same information.
+* Even on a single system, types can change across releases (e.g., `uid_t`, `gid_t`).
+
+### Standard System Data Types
+
+* Defined by SUSv3, most end with `_t`.
+* Portable across UNIX systems.
+* Example:
+
+```c
+typedef int pid_t;  // For process IDs on Linux/x86-32
+```
+
+* Usage:
+
+```c
+pid_t mypid;
+mypid = getpid();  // Get process ID
+```
+
+### Printing System Data Types Safely
+
+* Cannot blindly use `%d` or `%ld` due to type variability.
+* Standard trick: cast to `long` and use `%ld`:
+
+```c
+pid_t mypid;
+mypid = getpid();
+printf("My PID is %ld\n", (long) mypid);
+```
+
+* Exception: `off_t` may be `long long`, use `%lld`.
+* C99: `%zd` for `size_t`/`ssize_t`, `%jd` for `intmax_t` (not universally supported).
+
+### Example System Data Types (from SUSv3)
+
+| Type        | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `blkcnt_t`  | File block count                                             |
+| `blksize_t` | File block size                                              |
+| `cc_t`      | Terminal special character                                   |
+| `clock_t`   | System time in clock ticks                                   |
+| `dev_t`     | Device number (major/minor)                                  |
+| `fd_set`    | File descriptor set for `select()`                           |
+| `gid_t`     | Numeric group identifier                                     |
+| `id_t`      | Generic identifier type (can hold `pid_t`, `uid_t`, `gid_t`) |
+| `ino_t`     | File i-node number                                           |
+| `mode_t`    | File permissions and type                                    |
+| `off_t`     | File offset or size                                          |
+| `pid_t`     | Process ID, group ID, or session ID                          |
+| `size_t`    | Size of an object in bytes                                   |
+| `ssize_t`   | Byte count or negative error                                 |
+| `time_t`    | Calendar time in seconds since Epoch                         |
+| `uid_t`     | Numeric user identifier                                      |
+
+---
+## 3.6.3 Miscellaneous Portability Issues
+---
+
+In this section, we consider a few other portability issues that we may encounter when writing system programs.
+
+### Initializing and Using Structures
+
+Each UNIX implementation specifies a range of standard structures used in system calls and library functions. For example, the `sembuf` structure represents a semaphore operation for the `semop()` system call:
+
+```c
+struct sembuf {
+    unsigned short sem_num; /* Semaphore number */
+    short sem_op;           /* Operation to be performed */
+    short sem_flg;          /* Operation flags */
+};
+```
+
+Although SUSv3 specifies structures such as `sembuf`, note the following:
+
+* The order of field definitions within such structures is not guaranteed.
+* Extra implementation-specific fields may be included.
+
+Non-portable initialization example:
+
+```c
+struct sembuf s = { 3, -1, SEM_UNDO };
+```
+
+(This works on Linux, but may fail on other implementations where the field order differs.)
+
+Portable initialization using assignment statements:
+
+```c
+struct sembuf s;
+s.sem_num = 3;
+s.sem_op = -1;
+s.sem_flg = SEM_UNDO;
+```
+
+Portable initialization in C99 syntax:
+
+```c
+struct sembuf s = { .sem_num = 3, .sem_op = -1, .sem_flg = SEM_UNDO };
+```
+
+When writing structure contents to a file, write each field individually (preferably in text form) to ensure portability.
+
+### Using Macros That May Not Be Present
+
+Some macros may not exist on all UNIX implementations. For example, `WCOREDUMP()` checks whether a child process produced a core dump file, but it is not specified in SUSv3.
+
+Portable usage example:
+
+```c
+#ifdef WCOREDUMP
+/* Use WCOREDUMP() macro */
+#endif
+```
+
+### Variation in Required Header Files
+
+Header files required to prototype system calls and library functions can vary across UNIX implementations.
+
+* Comments like `/* For portability */` indicate headers not strictly required on Linux or by SUSv3 but needed on some older implementations.
+* POSIX.1-1990 required including `<sys/types.h>` before other headers for certain functions. SUSv1 removed this requirement. Including it early can improve portability.
+* For simplicity, example programs on Linux may omit `<sys/types.h>`.
+
+---
+
+
 
 
 
