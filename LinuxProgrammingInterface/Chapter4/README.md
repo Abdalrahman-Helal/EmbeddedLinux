@@ -364,3 +364,40 @@ ssize_t write(int fd, void *buffer, size_t count);
 - `write()` does **not guarantee that data has been flushed to disk** immediately. The kernel may buffer disk writes to improve performance.  
 - Arguments are similar to `read()`: both use a **buffer**, **count**, and **file descriptor**.  
 - `ssize_t` is a signed integer type used to hold a byte count or `-1` for errors.
+
+---
+## 4.6 Closing a File: `close()`
+---
+
+The `close()` system call closes an open file descriptor, freeing it for subsequent reuse by the process. When a process terminates, all of its open file descriptors are automatically closed.
+
+```c
+#include <unistd.h>
+int close(int fd);
+```
+
+**Returns:**
+
+* 0 on success
+* -1 on error
+
+**Parameters:**
+
+* `fd`: File descriptor to close.
+
+### Notes
+
+* It is good practice to **explicitly close unneeded file descriptors**, which makes code more readable and reliable.
+* File descriptors are a **consumable resource**; failing to close them may result in a process running out of descriptors. This is critical for long-lived programs handling multiple files (e.g., shells, network servers).
+* Always **check for errors** when calling `close()`:
+
+```c
+if (close(fd) == -1)
+    errExit("close");
+```
+
+* Possible errors include:
+
+  * Closing an unopened file descriptor
+  * Closing the same file descriptor twice
+  * File system-specific errors (e.g., NFS commit failure if data did not reach the remote disk)
