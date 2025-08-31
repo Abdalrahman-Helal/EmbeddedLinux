@@ -625,6 +625,22 @@ The only specification that SUSv3 makes for `ioctl()` is for operations to contr
 None of the other `ioctl()` operations described in this book is specified in SUSv3. However, the `ioctl()` call has been part of the UNIX system since early versions, and consequently several of the `ioctl()` operations that we describe are provided on many other UNIX implementations. As we describe each `ioctl()` operation, we note portability issues.
 
 ---
+# 4.9 Summary
+---
 
+To perform I/O on a regular file, we must first obtain a **file descriptor** using `open()`. I/O is then performed using `read()` and `write()`. After performing all I/O, we should free the file descriptor and its associated resources using `close()`.  
 
+These system calls can be used to perform I/O on **all types of files**. The fact that all file types and device drivers implement the same I/O interface allows for **universality of I/O**, meaning that a program can typically be used with any type of file without requiring code specific to the file type.
+
+For each open file, the kernel maintains a **file offset**, which determines the location at which the next read or write will occur. The file offset is **implicitly updated** by reads and writes. Using `lseek()`, we can explicitly reposition the file offset to any location within the file or past the end of the file. Writing data at a position beyond the previous end of the file creates a **hole** in the file. Reads from a file hole return bytes containing **zeros**.
+
+The `ioctl()` system call is a catchall for **device and file operations** that don’t fit into the standard file I/O model:
+
+```c
+#include <sys/ioctl.h>
+
+int ioctl(int fd, int request, ... /* argp */);
+```
+
+-----
 
