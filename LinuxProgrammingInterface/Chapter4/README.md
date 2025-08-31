@@ -315,7 +315,7 @@ ssize_t read(int fd, void *buffer, size_t count);
   * `buffer`: Pointer to memory where input data will be stored. Must be at least `count` bytes long.
   * `count`: Maximum number of bytes to read.
 
-## Notes
+### Notes
 
 * System calls do **not allocate memory**; the caller must provide a buffer.
 * `read()` may return **fewer bytes** than requested, especially near EOF or when reading from pipes, terminals, or sockets.
@@ -336,4 +336,31 @@ printf("The input data was: %s\n", buffer);
 
 * The buffer size should be **one byte larger** than the expected input to accommodate the null terminator.
 * `ssize_t` is a **signed integer** type used to hold a byte count or `-1` for errors.
+
 ---
+## 4.5 Writing to a File: `write()`
+---
+
+The `write()` system call writes data to an open file.
+
+```c
+#include <unistd.h>
+ssize_t write(int fd, void *buffer, size_t count);
+```
+
+- **Returns:**
+  - Number of bytes actually written  
+  - `-1` on error
+
+- **Parameters:**
+  - `fd`: File descriptor of the open file  
+  - `buffer`: Pointer to the data to write  
+  - `count`: Number of bytes to write from `buffer`
+
+### Notes
+
+- On success, `write()` may write **fewer bytes** than requested (`count`).  
+  - For disk files, partial writes can occur if the **disk is full** or if the **process resource limit on file sizes** is reached (`RLIMIT_FSIZE`).  
+- `write()` does **not guarantee that data has been flushed to disk** immediately. The kernel may buffer disk writes to improve performance.  
+- Arguments are similar to `read()`: both use a **buffer**, **count**, and **file descriptor**.  
+- `ssize_t` is a signed integer type used to hold a byte count or `-1` for errors.
