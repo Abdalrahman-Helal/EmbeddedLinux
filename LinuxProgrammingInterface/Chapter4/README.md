@@ -401,3 +401,61 @@ if (close(fd) == -1)
   * Closing an unopened file descriptor
   * Closing the same file descriptor twice
   * File system-specific errors (e.g., NFS commit failure if data did not reach the remote disk)
+
+
+---
+# 4.7 Changing the File Offset: `lseek()`
+---
+
+Each open file has a **file offset** (also called read-write offset or pointer), which is the location in the file where the next `read()` or `write()` will start. The first byte of a file is at offset `0`.
+
+When a file is opened, the file offset is set to the start of the file. Each `read()` or `write()` automatically advances the offset to the next byte after the last byte read or written.
+
+The `lseek()` system call allows you to **manually adjust the file offset**:
+
+```c
+#include <unistd.h>
+off_t lseek(int fd, off_t offset, int whence);
+```
+
+* **Returns:**
+   * New file offset on success
+   * `-1` on error
+* **Parameters:**
+   * `fd`: File descriptor of the open file
+   * `offset`: Number of bytes to move (type `off_t`, signed integer)
+   * `whence`: Base point for `offset`, one of:
+      * `SEEK_SET`: Set offset to `offset` bytes from the beginning of the file
+      * `SEEK_CUR`: Adjust offset by `offset` bytes from the current position
+      * `SEEK_END`: Set offset to the size of the file plus `offset` bytes
+
+## whence values
+
+| Value     | Meaning                                                    |
+|-----------|-----------------------------------------------------------|
+| SEEK_SET  | Set file offset to offset bytes from the beginning       |
+| SEEK_CUR  | Adjust file offset by offset bytes from current position |
+| SEEK_END  | Set file offset to size of file + offset                 |
+
+- If whence is SEEK_CUR or SEEK_END, offset can be positive or negative. For SEEK_SET, it must be nonnegative.
+- To get the current file offset without changing it:
+  ```c
+  off_t curr = lseek(fd, 0, SEEK_CUR);
+  ```
+
+## Examples
+
+```c
+lseek(fd, 0, SEEK_SET);     // Start of file
+lseek(fd, 0, SEEK_END);     // Next byte after end of file
+lseek(fd, -1, SEEK_END);    // Last byte of file
+lseek(fd, -10, SEEK_CUR);   // Ten bytes before current position
+lseek(fd, 10000, SEEK_END); // 10001 bytes past end of file
+```
+
+## Important Notes
+
+- `lseek()` only updates the kernel's record of the file offset; it does not perform physical I/O.
+- Not allowed on pipes, FIFOs, sockets, or terminals. Using it there sets errno to ESPIPE.
+
+---
