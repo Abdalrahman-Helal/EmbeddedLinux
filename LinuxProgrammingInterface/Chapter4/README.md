@@ -88,9 +88,53 @@ while ((numRead = read(inputFd, buf, sizeof(buf))) > 0) {
 /* Close both files */
 close(inputFd);
 close(outputFd);
-
+```
 
 ### Notes:
 - Proper error handling is essential (`errExit`, `fatal`).  
 - Buffer size (`BUF_SIZE`) controls efficiency (default: 1024).  
 - `close()` must be called to free system resources.  
+
+
+## 4.2 Universality of I/O
+
+The **UNIX I/O model** is based on the idea of **universality**:  
+the same system calls — `open()`, `read()`, `write()`, and `close()` — are used for all types of files, including devices like terminals.
+
+### Why It Matters
+- A program written with these four calls works on **any file type**.  
+- Device-specific details are hidden inside the **kernel**.  
+- Application developers can usually ignore differences between files and devices.
+
+### Example Usages
+```bash
+$ ./copy test test.old        # Copy a regular file
+$ ./copy a.txt /dev/tty       # Copy file to terminal
+$ ./copy /dev/tty b.txt       # Copy input from terminal to file
+$ ./copy /dev/pts/16 /dev/tty # Copy input from another terminal
+```
+
+### Special Cases
+When a program needs access to **extra device-specific features**, it uses the `ioctl()` system call.  
+This call provides an interface to functionality **beyond the universal I/O model**.
+
+---
+
+# Chapter 4: File I/O – The Universal I/O Model
+
+We now look at the system call API, starting with files, since they are central to the UNIX philosophy.
+
+---
+
+## The Universal I/O Model
+
+UNIX uses the **same four system calls** to perform I/O on all types of files, including devices like terminals:
+
+* `open()`
+* `read()`
+* `write()`
+* `close()`
+
+This universality ensures that programs using these calls work with any file type.
+
+---
