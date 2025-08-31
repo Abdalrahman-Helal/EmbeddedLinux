@@ -119,13 +119,6 @@ When a program needs access to **extra device-specific features**, it uses the `
 This call provides an interface to functionality **beyond the universal I/O model**.
 
 ---
-
-# Chapter 4: File I/O – The Universal I/O Model
-
-We now look at the system call API, starting with files, since they are central to the UNIX philosophy.
-
----
-
 ## The Universal I/O Model
 
 UNIX uses the **same four system calls** to perform I/O on all types of files, including devices like terminals:
@@ -299,4 +292,48 @@ fd = open(pathname, O_WRONLY | O_CREAT | O_TRUNC, mode);
 
 > Note: The `open()` flags argument provides more control (e.g., `O_RDWR` instead of `O_WRONLY`). Therefore, `creat()` is now considered obsolete, though it may still appear in older programs.
 
+---
+## 4.4 Reading from a File: `read()`
+---
+
+The `read()` system call reads data from an open file referred to by the file descriptor `fd`.
+
+```c
+#include <unistd.h>
+ssize_t read(int fd, void *buffer, size_t count);
+```
+
+* **Returns:**
+
+  * Number of bytes read
+  * `0` on end-of-file (EOF)
+  * `-1` on error
+
+* **Parameters:**
+
+  * `fd`: File descriptor of the open file.
+  * `buffer`: Pointer to memory where input data will be stored. Must be at least `count` bytes long.
+  * `count`: Maximum number of bytes to read.
+
+## Notes
+
+* System calls do **not allocate memory**; the caller must provide a buffer.
+* `read()` may return **fewer bytes** than requested, especially near EOF or when reading from pipes, terminals, or sockets.
+* `read()` **does not append a null terminator** to character data. If reading strings, you must add it manually:
+
+```c
+#define MAX_READ 20
+char buffer[MAX_READ + 1]; // make buffer 1-byte larger
+ssize_t numRead;
+
+numRead = read(STDIN_FILENO, buffer, MAX_READ);
+if (numRead == -1)
+    errExit("read");
+
+buffer[numRead] = '\0'; // add null terminator
+printf("The input data was: %s\n", buffer);
+```
+
+* The buffer size should be **one byte larger** than the expected input to accommodate the null terminator.
+* `ssize_t` is a **signed integer** type used to hold a byte count or `-1` for errors.
 ---
