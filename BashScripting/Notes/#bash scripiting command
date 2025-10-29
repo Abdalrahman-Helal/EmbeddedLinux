@@ -1,0 +1,26 @@
+#bash scripiting command 
+
+read -p -> is used to prompt the user for input on the same line.
+ex:
+read -p "Enter your name: " name
+echo "Hello, $name!"
+
+
+
+read -s -> the -s option with read makes the input silent — meaning it doesn’t show what the user types (useful for passwords).
+ex: 
+read -s -p "Enter your password: " password
+echo
+echo "Password entered."
+
+
+
+
+set -x → turns debug mode ON
+It makes the shell print each command before executing it, with all variable values expanded.
+Useful for seeing what your script is actually doing step by step.
+
+set +x → turns debug mode OFF
+You use this to stop showing those trace lines.
+
+
