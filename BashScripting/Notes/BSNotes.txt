@@ -24,3 +24,17 @@ set +x → turns debug mode OFF
 You use this to stop showing those trace lines.
 
 
+test -f file.txt
+
+if [ -f "./test.sh" ]
+then
+    echo "File Exist"
+else
+    echo "File Doesn't Exist"
+fi
+
+OR in one line : 
+test -f "./test.sh" && echo "File Exist" || echo "File Doesn't Exist"
+
+
+
