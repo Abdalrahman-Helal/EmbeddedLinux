@@ -113,3 +113,32 @@ the @ symbol tells Bash: Expand all elements of the array, each element as a sep
 
 ex: ADDR=("A" "B" "C")
     echo "${ADDR[@]}"       -> A B C    #Each value is separate.
+
+
+
+
+
+Functions 
+
+How to Declare Function : 
+Note : u can u use keyword function or not and () too 
+
+function test()
+{
+
+}
+
+
+Bash provides arithmetic expansion:
+$(( expression ))
+ex: echo $(( 10 + 20 ))
+
+$? #return of last command saved in $? by default
+
+
+declare -f -> Lists all the functions currently defined in your shell.
+              Shows the function name, parameters (if any), and body.
+              It does not execute the functions, just prints their definitions.
+
+ex: declare -f function
+              
