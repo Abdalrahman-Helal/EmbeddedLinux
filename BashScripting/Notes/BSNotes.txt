@@ -1,5 +1,8 @@
 #bash scripiting command 
 
+Backticks execute a command and store its output into a variable.
+ex: length=`echo $str | wc -c`
+
 read -p -> is used to prompt the user for input on the same line.
 ex:
 read -p "Enter your name: " name
@@ -76,3 +79,37 @@ Example: ./script.sh one "two three" four
 args=("$@")       # Store all script arguments into an array called args
 echo "arguments to the shell"
 echo ${args[0]} ${args[1]} ${args[2]}   # Print first three arguments
+
+
+
+
+Always quote variables unless you have a specific reason not to
+"$var" -> Protects spaces, tabs, and special characters.
+ex: 
+name="Hello World"
+echo $name     # ❌ prints: Hello World → may break commands
+echo "$name"   # ✅ prints: Hello World safely
+
+
+
+Strings
+
+IFS=',' -> It tells Bash: “Whenever you split text, split on a comma.
+IFS = Internal Field Separator
+
+
+
+
+read -ra ADDR <<<"$str" 
+
+read       → reads input and splits it using the current IFS
+-r         → don’t escape backslashes
+-a ADDR    → store the split values in an array called ADDR
+<<< "$str" → here-string → Means: “Give the value of $str to the read command as input”
+
+
+What does @ mean inside ${ADDR[@]} 
+the @ symbol tells Bash: Expand all elements of the array, each element as a separate word.
+
+ex: ADDR=("A" "B" "C")
+    echo "${ADDR[@]}"       -> A B C    #Each value is separate.
