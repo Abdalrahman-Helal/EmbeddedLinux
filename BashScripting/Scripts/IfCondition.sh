@@ -49,11 +49,59 @@
 
 
 
-test -f "./tessst.sh" && echo "File Exist" || echo "File Doesn't Exist"
+# test -f "./tessst.sh" && echo "File Exist" || echo "File Doesn't Exist"
 
-if [ -f "./test.sh" ]
-then
-    echo "File Exist"
-else
-    echo "File Doesn't Exist"
+# if [ -f "./test.sh" ]
+# then
+#     echo "File Exist"
+# else
+#     echo "File Doesn't Exist"
+# fi
+
+
+
+#! /bin/bash
+
+if [ 1 -eq 1  -a  5 -gt 4 ]
+then 
+echo "#rule 1"
+fi 
+
+if [ 1 -eq 1 ] && [ 5 -gt 4 ]
+then 
+echo "#rule 2"
+fi 
+
+if [[ 1 -eq 1  &&  5 -gt 4 ]]
+then 
+echo "#rule 3"
+fi 
+
+
+# C Style 
+if((001 == 1))
+then 
+echo "#rule 4"
 fi
+
+
+x=0
+if((++x))
+then
+echo "#rule 5"
+fi
+
+x=0
+if((x++))
+then
+echo "#rule 6"
+else
+echo "#Invalid 6"
+fi
+
+
+<<Comment
+Multiline Comment
+Multiline Comment
+Multiline Comment
+Comment
