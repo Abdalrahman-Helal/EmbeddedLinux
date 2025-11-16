@@ -37,3 +37,42 @@ OR in one line :
 test -f "./test.sh" && echo "File Exist" || echo "File Doesn't Exist"
 
 
+Arguments
+$$ -> Prints the Process ID (PID) of the current shell running the script.
+ex: echo "PID of this script: $$"
+
+echo $0 -> Prints the name of the script.
+echo $1
+echo $3 -> Prints the first and third arguments passed to the script.
+
+echo $# -> Prints the number of arguments passed to the script.
+
+echo $@ -> Prints all arguments as separate words.
+
+echo $* -> Prints all arguments as a single string. 
+
+echo $? ->  Check last command : 0 means success else error
+            Prints the exit status of the last command
+            Since it failed, $? will be non-zero (usually 127 for command not found).
+
+
+
+$@ ->  Represents all arguments passed to the script, preserving spaces
+
+
+        $@     vs     $*
+Example: ./script.sh one "two three" four
+
+
+"$@" → preserves argument boundaries.  OUTPUT : one
+                                                two three
+                                                four
+                                                
+"$*" → combines everything into a single string.  OUTPUT: one two three four
+
+
+
+#Arguments with array 
+args=("$@")       # Store all script arguments into an array called args
+echo "arguments to the shell"
+echo ${args[0]} ${args[1]} ${args[2]}   # Print first three arguments
