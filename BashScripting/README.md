@@ -4,4 +4,5 @@ This folder contains all the **Bash scripts** and **notes** I create while learn
 
 ## 📁 Structure
 - `Scripts/` → Bash scripts I write during practice  
-- `Notes/` → Short notes and summaries about commands and concepts
+- `Notes/` → Short notes and summaries about commands and concepts  
+- `Labs/` → Lab exercises and practical experiments related to Bash scripting
